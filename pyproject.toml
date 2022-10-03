@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "deep brain structural connectivity"
+name = "labelmerge"
 version = "0.1.0-pre.1"
-description = "SnakeBIDS app for mapping the subcortical connectome"
+description = "SnakeBIDS app for merging multiple label maps."
 authors = ["Jason Kai <tkai@uwo.ca>"]
 readme = "README.md"
 
