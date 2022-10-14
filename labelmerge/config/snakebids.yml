@@ -17,21 +17,34 @@ targets_by_analysis_level:
   participant:
     - "all" # if "", then the first rule is run
   group:
-    - "all_group_tsv"
+    - "all"
 
 # this configures the pybids grabber - create an entry for each type of input you want to grab
 # indexed by name of input dictionary for each input is passed directly to pybids get()
 # https://bids-standard.github.io/pybids/generated/bids.layout.BIDSLayout.html#bids.layout.BIDSLayout.get
 pybids_inputs:
-  T1w:
+  labelmap:
     filters:
-      suffix: "T1w"
+      suffix: "dseg"
       extension: ".nii.gz"
       datatype: "anat"
-      space: null 
     wildcards:
       - subject
       - session
+      - res
+      - den
+      - space
+  labellist:
+    filters:
+      suffix: "dseg"
+      extension: ".tsv"
+      datatype: "anat"
+    wildcards:
+      - subject
+      - session
+      - res
+      - den
+      - space
 
 # Configuration for the command-line parameters to make available
 # passed on the argparse add_argument()
