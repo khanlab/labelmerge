@@ -17,18 +17,21 @@ checkpoint split_labels:
                 )
             )
         ),
-    container:
-        "docker://khanlab/neuroglia-core"
-    shell:
-        "mkdir -p {output.binary_dir}; c3d {input} -split -oo {output.binary_dir}/label%02d.nii.gz"
-
+    # Update container that has appropriate dependencies
+    # container:
+    #     "docker://khanlab/neuroglia-core"
+    script:
+        '../scripts/label_split.py'
 
 def aggregate_input(wildcards):
     checkpoint_output = checkpoints.split_labels.get(**wildcards).output.binary_dir
-    label_mask_path = str(Path(checkpoint_output) / "label{i}.nii.gz")
+    label_fname = Path(
+            bids(label="{label_idx}", suffix="dseg.nii.gz", **wildcards)
+        ).name
+    label_mask_path = str(Path(checkpoint_output) / label_fname)
     return expand(
         label_mask_path,
-        i=glob_wildcards(label_mask_path).i,
+        label_idx=glob_wildcards(label_mask_path).label_idx,
     )
 
 

@@ -32,7 +32,7 @@ pybids_inputs:
       - subject
       - session
       - res
-      - den
+      - hemi
       - space
   labellist:
     filters:
@@ -43,7 +43,7 @@ pybids_inputs:
       - subject
       - session
       - res
-      - den
+      - hemi
       - space
 
 # Configuration for the command-line parameters to make available
