@@ -21,6 +21,7 @@ def label_split(atlas_path, output_dir, smk_wildcards):
 
     # Load atlas
     atlas_data, atlas_header, atlas_affine = load_atlas(atlas_path)
+    Path(output_dir).mkdir(parents=True)
 
     # Extract & save unique labels
     for label in np.unique(atlas_data[atlas_data > 0]):
@@ -34,7 +35,7 @@ def label_split(atlas_path, output_dir, smk_wildcards):
 
         # Set file name
         label_fname = Path(
-            bids(label=label, suffix="dseg.nii.gz", **smk_wildcards)
+            bids(label=int(label), suffix="dseg.nii.gz", **smk_wildcards)
         ).name
 
         nib.save(label_img, f"{output_dir}/{label_fname}")
@@ -44,5 +45,5 @@ if __name__ == "__main__":
     label_split(
         atlas_path=snakemake.input["labelmap"],
         output_dir=snakemake.output["binary_dir"],
-        wildcards=snakemake.wildcards,
+        smk_wildcards=snakemake.wildcards,
     )

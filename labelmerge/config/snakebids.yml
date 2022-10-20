@@ -30,6 +30,7 @@ pybids_inputs:
       datatype: "anat"
     wildcards:
       - subject
+      - desc
       - session
       - res
       - hemi
