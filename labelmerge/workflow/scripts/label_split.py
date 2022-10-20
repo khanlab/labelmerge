@@ -9,7 +9,7 @@ from snakebids import bids
 def load_atlas(atlas_path):
     """Loading relevant atlas data"""
     atlas = nib.load(atlas_path)
-    data = atlas.get_fdata()
+    data = atlas.get_fdata().astype(np.ushort)
     header = atlas.header
     affine = atlas.affine
 
