@@ -17,7 +17,7 @@ checkpoint split_labels:
                 )
             )
         ),
-    # Update container that has appropriate dependencies
+    # TODO: Update container that has appropriate dependencies
     # container:
     #     "docker://khanlab/neuroglia-core"
     script:

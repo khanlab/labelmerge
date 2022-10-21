@@ -30,10 +30,8 @@ pybids_inputs:
       datatype: "anat"
     wildcards:
       - subject
-      - desc
       - session
       - res
-      - hemi
       - space
   labellist:
     filters:
@@ -44,7 +42,6 @@ pybids_inputs:
       - subject
       - session
       - res
-      - hemi
       - space
 
 # Configuration for the command-line parameters to make available
