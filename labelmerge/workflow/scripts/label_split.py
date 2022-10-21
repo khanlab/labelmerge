@@ -35,7 +35,19 @@ def label_split(atlas_path, output_dir, smk_wildcards):
 
         # Set file name
         label_fname = Path(
-            bids(label=int(label), suffix="dseg.nii.gz", **smk_wildcards)
+            bids(label=int(label), suffix="dseg.ni- name: Commit updates
+        env:
+          SNAKEBIDS_VERSION: ${{ env.NEW_RELEASE }}-pre.${{ env.NEW_BUMP }}
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git diff-index --quiet HEAD || git commit -m "Bump version to $SNAKEBIDS_VERSION" -a
+      - name: Push changes
+        uses: CasperWA/push-protected@v2
+        with:
+          branch: ${{ github.event.pull_request.base.ref }}
+          token: ${{ secrets.BP_PAT_TOKEN }}
+          unprotect_reviews: Truei.gz", **smk_wildcards)
         ).name
 
         nib.save(label_img, f"{output_dir}/{label_fname}")
