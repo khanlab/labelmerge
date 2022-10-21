@@ -6,7 +6,6 @@ import numpy as np
 import pandas as pd 
 from snakebids import bids
 
-
 def load_atlas(atlas_path):
     """Loading relevant atlas data"""
     atlas = nib.load(atlas_path)
@@ -16,7 +15,7 @@ def load_atlas(atlas_path):
 
     return data, header, affine
 
-def load_metadata(atlas_path, smk_wildcards):
+def load_metadata(atlas_path):
     """Load metadata associated with atlas"""
     # Find and read associated metadata file with atlas
     try:
@@ -40,7 +39,7 @@ def label_split(atlas_path, output_dir, smk_wildcards):
 
     # Load atlas + metadata
     atlas_data, atlas_header, atlas_affine = load_atlas(atlas_path)
-    atlas_metadata = load_metadata(atlas_path, smk_wildcards)    
+    atlas_metadata = load_metadata(atlas_path)    
 
     # Extract & save unique labels
     for label in np.unique(atlas_data[atlas_data > 0]):
@@ -59,9 +58,8 @@ def label_split(atlas_path, output_dir, smk_wildcards):
         # Set file name
         label_fname = Path(
             bids(
-                label=int(label),
-                desc=label_desc,
-                suffix="dseg.nii.gz", 
+                label=label_desc,
+                suffix="mask.nii.gz", 
                 **smk_wildcards)
         ).name
 
