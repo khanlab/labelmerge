@@ -21,10 +21,6 @@ def load_metadata(atlas_path, smk_wildcards):
     # Find and read associated metadata file with atlas
     try:
         tsv_path = atlas_path.replace("nii.gz", "tsv")
-        if smk_wildcards.get("space"):
-            tsv_path = tsv_path.replace(
-                f'_space-{smk_wildcards.get("space")}', ""
-            )
         metadata = pd.read_csv(tsv_path, sep='\t')
     except:
         raise FileNotFoundError(
