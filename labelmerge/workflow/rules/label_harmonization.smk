@@ -21,13 +21,14 @@ checkpoint split_labels:
     # container:
     #     "docker://khanlab/neuroglia-core"
     script:
-        '../scripts/label_split.py'
+        "../scripts/label_split.py"
+
 
 def aggregate_input(wildcards):
     checkpoint_output = checkpoints.split_labels.get(**wildcards).output.binary_dir
     label_fname = Path(
-            bids(label="{label_idx}", suffix="mask.nii.gz", **wildcards)
-        ).name
+        bids(label="{label_idx}", suffix="mask.nii.gz", **wildcards)
+    ).name
     label_mask_path = str(Path(checkpoint_output) / label_fname)
     return expand(
         label_mask_path,

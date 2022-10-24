@@ -17,8 +17,6 @@ inputs = snakebids.generate_inputs(
 )
 
 
-
-
 # this adds constraints to the bids naming
 wildcard_constraints:
     **snakebids.get_wildcard_constraints(config["pybids_inputs"]),
