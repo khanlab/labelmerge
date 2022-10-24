@@ -28,24 +28,13 @@ pybids_inputs:
       suffix: "dseg"
       extension: ".nii.gz"
       datatype: "anat"
+      desc: true
     wildcards:
       - subject
       - session
       - desc
       - res
       - space
-  labellist:
-    filters:
-      suffix: "dseg"
-      extension: ".tsv"
-      datatype: "anat"
-    wildcards:
-      - subject
-      - session
-      - desc
-      - res
-      - space
-
 # Configuration for the command-line parameters to make available
 # passed on the argparse add_argument()
 parse_args: 
