@@ -28,14 +28,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 setup = "pre-commit install"
-<<<<<<< HEAD
 quality = { shell = "isort labelmerge/*.py && black labelmerge" }
-=======
 isort = "isort labelmerge/*.py"
 black = "black labelmerge -l 79"
 snakefmt = "snakefmt labelmerge"
 quality = ["isort", "black", "snakefmt"]
->>>>>>> 4cd9fdc... add poe tasks for quality
 
 [tool.isort]
 profile = "black"
