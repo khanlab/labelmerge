@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import glob
+import os
 from pathlib import Path
 
 import nibabel as nib
@@ -17,30 +19,49 @@ def load_atlas(atlas_path):
     return data, header, affine
 
 
-def load_metadata(atlas_path):
+def load_metadata(atlas_path, bids_dir, smk_wildcards):
     """Load metadata associated with atlas"""
-    # Find and read associated metadata file with atlas
-    try:
-        tsv_path = atlas_path.replace("nii.gz", "tsv")
-        metadata = pd.read_csv(tsv_path, sep="\t")
-    except:
-        raise FileNotFoundError(f"{tsv_path} file not found")
+    # Walk backwards to find dseg until bids_dir is hit
+    tsv_file = None
+    cur_dir = atlas_path.parent
+    while cur_dir != bids_dir and tsv_file == None:
+        # Check number of dseg files found
+        dseg_files = list(glob.iglob(f"{cur_dir}/*dseg.tsv"))
+        num_dsegs = len(dseg_files)
 
-    # Create new column storing description for filename
+        if num_dsegs == 1:
+            # If single file, assume association
+            tsv_file = Path(dseg_files[0])
+        elif num_dsegs > 1:
+            # If multiple files, assume desc entity exists
+            for dseg_file in dseg_files:
+                if smk_wildcards["desc"] in dseg_file:
+                    tsv_file = dseg_file
+        else:
+            # Move up a directory
+            cur_dir = cur_dir.parent
+
+    # If still no file found
+    if not tsv_file:
+        raise FileNotFoundError("No associated tsv file found")
+
+    # Read associated file and create new column storing description
+    metadata = pd.read_csv(tsv_file, sep="\t")
     metadata["BIDS Name"] = metadata["Name"].str.title().str.replace(" ", "")
 
     return metadata
 
 
-def label_split(atlas_path, output_dir, smk_wildcards):
+def label_split(atlas_path, output_dir, smk_wildcards, bids_dir):
     """Split labels from atlas into individual files"""
 
     # Create parent directory
     Path(output_dir).mkdir(parents=True)
 
     # Load atlas + metadata
+    atlas_path = Path(atlas_path)
     atlas_data, atlas_header, atlas_affine = load_atlas(atlas_path)
-    atlas_metadata = load_metadata(atlas_path)
+    atlas_metadata = load_metadata(atlas_path, bids_dir, smk_wildcards)
 
     # Extract & save unique labels
     for label in np.unique(atlas_data[atlas_data > 0]):
@@ -52,9 +73,14 @@ def label_split(atlas_path, output_dir, smk_wildcards):
         )
 
         # Grab label description
-        label_desc = atlas_metadata[atlas_metadata["Index"] == int(label)][
-            "BIDS Name"
-        ].values[0]
+        try:
+            label_desc = atlas_metadata[atlas_metadata["Index"] == int(label)][
+                "BIDS Name"
+            ].values[0]
+        except:
+            raise ValueError(
+                f"Label f{int(label)} does not exist in the associated tsv file"
+            )
 
         # Set file name
         label_fname = Path(
@@ -69,4 +95,5 @@ if __name__ == "__main__":
         atlas_path=snakemake.input["labelmap"],
         output_dir=snakemake.output["binary_dir"],
         smk_wildcards=snakemake.wildcards,
+        bids_dir=snakemake.params["bids_dir"],
     )
