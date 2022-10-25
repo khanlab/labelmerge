@@ -28,7 +28,6 @@ pybids_inputs:
       suffix: "dseg"
       extension: ".nii.gz"
       datatype: "anat"
-      desc: true
     wildcards:
       - subject
       - session
