@@ -1,29 +1,35 @@
-#---- begin snakebids boilerplate ----------------------------------------------
+# ---- begin snakebids boilerplate ----------------------------------------------
 
 import snakebids
 from snakebids import bids
 
-configfile: 'config/snakebids.yml'
+
+configfile: "config/snakebids.yml"
 
 
 inputs = snakebids.generate_inputs(
     bids_dir=config["bids_dir"],
     pybids_inputs=config["pybids_inputs"],
+    pybids_config=["bids", "derivatives"],
     derivatives=config["derivatives"],
     participant_label=config["participant_label"],
+    use_bids_inputs=True,
 )
+
 
 # this adds constraints to the bids naming
-wildcard_constraints:  **snakebids.get_wildcard_constraints(\
-    config["pybids_inputs"]\
-)
+wildcard_constraints:
+    **snakebids.get_wildcard_constraints(config["pybids_inputs"]),
 
-#---- end snakebids boilerplate ------------------------------------------------
 
-rule all:
-    input:
-        combined_labelmap=bids(root=str(Path(config["out_dir"]) / "labelmerge"), suffix="dseg.nii", **inputs.input_wildcards)
+# ---- end snakebids boilerplate ------------------------------------------------
 
 
 # Rules
 include: "rules/label_harmonization.smk"
+
+
+rule all:
+    input:
+        expand(rules.aggregate.output[0], zip, **inputs["labelmap"].input_zip_lists),
+    default_target: True
