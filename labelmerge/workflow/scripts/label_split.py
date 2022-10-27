@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import glob
-import os
 from pathlib import Path
 
 import nibabel as nib
