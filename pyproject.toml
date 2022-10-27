@@ -2,7 +2,15 @@
 name = "labelmerge"
 version = "0.1.0-pre.1"
 description = "SnakeBIDS app for merging multiple label maps."
-authors = ["Jason Kai <tkai@uwo.ca>"]
+authors = [
+    "Jason Kai <tkai@uwo.ca>, 
+    Tristan Kuehn,
+    Bradley Karat,
+    Alaa Taha,
+    Arun Thurairajah,
+    Jonathan C. Lau, 
+    Ali R. Khan"
+]
 readme = "README.md"
 
 [tool.poetry.dependencies]
