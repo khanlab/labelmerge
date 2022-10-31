@@ -5,6 +5,8 @@ from snakebids import bids
 checkpoint split_labels:
     input:
         labelmap=inputs["labelmap"].input_path,
+    params:
+        bids_dir=config["bids_dir"],
     output:
         binary_dir=directory(
             str(
