@@ -23,7 +23,7 @@ def load_metadata(atlas_path, bids_dir, smk_wildcards):
     # Walk backwards to find dseg until bids_dir is hit
     tsv_file = None
     cur_dir = atlas_path.parent
-    while cur_dir != bids_dir and tsv_file == None:
+    while cur_dir != Path(bids_dir).parent and tsv_file == None:
         # Check number of dseg files found
         dseg_files = list(glob.iglob(f"{cur_dir}/*dseg.tsv"))
         num_dsegs = len(dseg_files)
