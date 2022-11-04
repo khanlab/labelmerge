@@ -3,7 +3,7 @@
     "BIDSVersion": "1.4.0",
     "DatasetType": "derivative",
     "GeneratedBy": [
-        { 
+        {
             "Name": "Deep Brain Structural Connectivity (DBSC)",
             "Version": "0.1.0",
             "CodeURL": "https://github.com/kaitj/dbsc",

@@ -3,7 +3,7 @@ output_dir: "/path/to/output/dir" # don't use "."
 
 snakebids_dir: "." # DO NOT MODIFY - used to refer to files need by workflow running with CLI
 
-debug: False # Enable printing of debug statements during parsing -- disable if generating dag visualizations 
+debug: False # Enable printing of debug statements during parsing -- disable if generating dag visualizations
 
 derivatives: False # Search in bids/derivatives if True; can also be path(s) to derivatives datasets
 
@@ -36,15 +36,15 @@ pybids_inputs:
       - space
 # Configuration for the command-line parameters to make available
 # passed on the argparse add_argument()
-parse_args: 
+parse_args:
 
-#--- core BIDS-app options --- (do not modify below) ---# 
+#--- core BIDS-app options --- (do not modify below) ---#
   bids_dir:
     help: The directory with the input dataset formatted according to the BIDS standard
 
   output_dir:
-    help: The directory where the output files should be stored. If you are running 
-          group level analysis, this folder should be prepopulated with the results 
+    help: The directory where the output files should be stored. If you are running
+          group level analysis, this folder should be prepopulated with the results
           of the participant level analysis
 
   analysis_level:
@@ -62,11 +62,11 @@ parse_args:
   --exclude_participant_label:
     help: The label(s) of the participant(s) that should be excluded. The label
           corresponds to sub-<participant_label> from the BIDS spec (so it does
-          not include "sub-"). If this parameter is not provided, all subjects 
+          not include "sub-"). If this parameter is not provided, all subjects
           will be analyzed. Multiple participants can be specified with a space
           sepearated list.
     nargs: "+"
-#-----------------------------------------------------# 
+#-----------------------------------------------------#
 
 #--- additional BIDS-app options --- (add in below) --#
 #-----------------------------------------------------#
