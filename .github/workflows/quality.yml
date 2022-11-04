@@ -50,13 +50,13 @@ jobs:
         run: poetry install --no-interaction --no-root --with dev
 
       - name: isort
-        run: poetry run isort labelmerge -c
+        run: poetry run poe isort
 
       - name: black
-        run: poetry run black labelmerge --check
+        run: poetry run poe black
 
       - name: flake8
-        run: poetry run flake8 labelmerge
+        run: poetry run poe flake8
 
       - name: snakefmt
-        run: poetry run snakefmt labelmerge
+        run: poetry run poe snakefmt
