@@ -46,6 +46,9 @@ quality = ["isort", "black", "flake8", "snakefmt"]
 profile = "black"
 multi_line_output = 3
 
+[tool.black]
+line-length = 79
+
 [tool.flake8]
 ignore = 'E501'
 
