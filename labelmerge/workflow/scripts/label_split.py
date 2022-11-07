@@ -3,6 +3,7 @@ import glob
 from pathlib import Path
 from sys import exit
 
+from bids.layout import parse_file_entities
 import nibabel as nib
 import numpy as np
 import pandas as pd
@@ -19,27 +20,34 @@ def load_atlas(atlas_path):
     return data, header, affine
 
 
-def load_metadata(atlas_path, bids_dir, smk_wildcards):
+def load_metadata(atlas_path, bids_dir):
     """Load metadata associated with atlas"""
     # Walk backwards to find dseg until bids_dir is hit
     tsv_file = None
     cur_dir = atlas_path.parent
-    while cur_dir != Path(bids_dir).parent and not tsv_file:
+    atlas_entities = parse_file_entities(atlas_path)
+    del atlas_entities["extension"]
+    while cur_dir != Path(bids_dir).parent and tsv_file is None:
         # Check number of dseg files found
         dseg_files = list(glob.iglob(f"{cur_dir}/*dseg.tsv"))
-        num_dsegs = len(dseg_files)
 
-        if num_dsegs == 1:
-            # If single file, assume association
-            tsv_file = Path(dseg_files[0])
-        elif num_dsegs > 1:
-            # If multiple files, assume desc entity exists
-            for dseg_file in dseg_files:
-                if smk_wildcards["desc"] in dseg_file:
-                    tsv_file = dseg_file
-        else:
-            # Move up a directory
-            cur_dir = cur_dir.parent
+        for candidate in dseg_files:
+            possible = True
+            candidate_entities = parse_file_entities(candidate)
+            del candidate_entities["extension"]
+            for key, val in candidate_entities.items():
+                if (key not in atlas_entities) or (atlas_entities[key] != val):
+                    possible = False
+            if possible:
+                if tsv_file is None:
+                    tsv_file = candidate
+                else:
+                    raise ValueError(
+                        "Multiple applicable metadata files applicable at this level "
+                        "of the directory hierarchy"
+                    )
+        # Move up a directory
+        cur_dir = cur_dir.parent
 
     # If still no file found
     if not tsv_file:
@@ -61,7 +69,7 @@ def label_split(atlas_path, output_dir, smk_wildcards, bids_dir):
     # Load atlas + metadata
     atlas_path = Path(atlas_path)
     atlas_data, atlas_header, atlas_affine = load_atlas(atlas_path)
-    atlas_metadata = load_metadata(atlas_path, bids_dir, smk_wildcards)
+    atlas_metadata = load_metadata(atlas_path, bids_dir)
 
     # Extract & save unique labels
     for label in np.unique(atlas_data[atlas_data > 0]):
@@ -77,9 +85,9 @@ def label_split(atlas_path, output_dir, smk_wildcards, bids_dir):
             label_desc = atlas_metadata[atlas_metadata["Index"] == int(label)][
                 "BIDS Name"
             ].values[0]
-        except IndexError:
-            print(
-                f"MetadataError: Label {int(label)} does not exist in the associated tsv file"
+        except:
+            raise ValueError(
+                f"Label {int(label)} does not exist in the associated tsv file"
             )
             exit(1)
 

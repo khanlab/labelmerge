@@ -31,7 +31,6 @@ pybids_inputs:
     wildcards:
       - subject
       - session
-      - desc
       - res
       - space
 # Configuration for the command-line parameters to make available
@@ -70,6 +69,17 @@ parse_args:
 
 #--- additional BIDS-app options --- (add in below) --#
 #-----------------------------------------------------#
+
+  --overlay_bids_dir:
+    help: Directory containing labelmaps to be overlaid on the base input
+          labelmaps.
+    nargs: "?"
+  --base_desc:
+    help: Description entity for base labelmaps
+    nargs: "?"
+  --overlay_desc:
+    help: Description entity for overlay labelmaps
+    nargs: "?"
 
 # Workflow specific config
 

@@ -1,5 +1,7 @@
 # ---- begin snakebids boilerplate ----------------------------------------------
 
+from functools import partial
+
 import snakebids
 from snakebids import bids
 
@@ -7,13 +9,26 @@ from snakebids import bids
 configfile: "config/snakebids.yml"
 
 
-inputs = snakebids.generate_inputs(
-    bids_dir=config["bids_dir"],
-    pybids_inputs=config["pybids_inputs"],
+base_inputs = config["pybids_inputs"].copy()
+base_inputs["labelmap"]["filters"]["desc"] = (
+    config.get("base_desc") if config.get("base_desc") else False
+)
+overlay_inputs = config["pybids_inputs"].copy()
+overlay_inputs["labelmap"]["filters"]["desc"] = (
+    config.get("overlay_desc") if config.get("overlay_desc") else False
+)
+
+
+generate_labelmap = partial(
+    snakebids.generate_inputs,
     pybids_config=["bids", "derivatives"],
     derivatives=config["derivatives"],
     participant_label=config["participant_label"],
     use_bids_inputs=True,
+)
+inputs = generate_labelmap(bids_dir=config["bids_dir"], pybids_inputs=base_inputs)
+overlay = generate_labelmap(
+    bids_dir=config["overlay_bids_dir"], pybids_inputs=overlay_inputs
 )
 
 
@@ -31,5 +46,9 @@ include: "rules/label_harmonization.smk"
 
 rule all:
     input:
-        expand(rules.aggregate.output[0], zip, **inputs["labelmap"].input_zip_lists),
+        expand(
+            expand(rules.aggregate.output[0], desc="combined", allow_missing=True),
+            zip,
+            **inputs["labelmap"].input_zip_lists
+        ),
     default_target: True
