@@ -9,26 +9,13 @@ from snakebids import bids
 configfile: "config/snakebids.yml"
 
 
-base_inputs = config["pybids_inputs"].copy()
-base_inputs["labelmap"]["filters"]["desc"] = (
-    config.get("base_desc") if config.get("base_desc") else False
-)
-overlay_inputs = config["pybids_inputs"].copy()
-overlay_inputs["labelmap"]["filters"]["desc"] = (
-    config.get("overlay_desc") if config.get("overlay_desc") else False
-)
-
-
-generate_labelmap = partial(
-    snakebids.generate_inputs,
+inputs = snakebids.generate_inputs(
+    bids_dir=config["bids_dir"],
     pybids_config=["bids", "derivatives"],
     derivatives=config["derivatives"],
+    pybids_inputs=config["pybids_inputs"],
     participant_label=config["participant_label"],
     use_bids_inputs=True,
-)
-inputs = generate_labelmap(bids_dir=config["bids_dir"], pybids_inputs=base_inputs)
-overlay = generate_labelmap(
-    bids_dir=config["overlay_bids_dir"], pybids_inputs=overlay_inputs
 )
 
 

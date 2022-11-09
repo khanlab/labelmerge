@@ -33,6 +33,7 @@ pybids_inputs:
       - session
       - res
       - space
+      - desc
 # Configuration for the command-line parameters to make available
 # passed on the argparse add_argument()
 parse_args:

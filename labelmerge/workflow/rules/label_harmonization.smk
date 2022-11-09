@@ -3,67 +3,55 @@ from pathlib import Path
 from snakebids import bids
 
 
-def aggregate_input(wildcards, checkpoint):
-    checkpoint_output = checkpoint.get(**wildcards).output.binary_dir
-    label_fname = Path(
-        bids(label="{label_idx}", suffix="mask.nii.gz", **wildcards)
-    ).name
-    label_mask_path = str(Path(checkpoint_output) / label_fname)
-    return expand(
-        label_mask_path,
-        label_idx=glob_wildcards(label_mask_path).label_idx,
+def split_labels_path(wildcards):
+    return str(
+        Path(checkpoints.split_labels.get(**wildcards).output.binary_dir)
+        / Path(bids(label="{label_idx}", suffix="mask.nii.gz", **wildcards)).name
     )
 
 
-checkpoint split_base_labels:
-    input:
-        labelmap=bids(
-            root=config["bids_dir"],
-            desc=config.get("base_desc", None),
+def aggregate_inputs(wildcards):
+    base_mask_path = split_labels_path(dict(wildcards, desc=config["base_desc"]))
+    overlay_mask_path = split_labels_path(dict(wildcards, desc=config["overlay_desc"]))
+    return {
+        "base": expand(
+            base_mask_path,
+            label_idx=glob_wildcards(base_mask_path).label_idx,
+        ),
+        "overlay": expand(
+            overlay_mask_path,
+            label_idx=glob_wildcards(overlay_mask_path).label_idx,
+        ),
+    }
+
+
+
+def choose_root(wildcards):
+    return config["bids_dir"] if wildcards["desc"] == config["base_desc"] else config["overlay_bids_dir"]
+
+
+def build_labelmap_path(wildcards):
+    return {
+        "labelmap": bids(
+            root=choose_root(wildcards),
             datatype="anat",
             suffix="dseg.nii.gz",
             **inputs["labelmap"].input_wildcards
         ),
+    }
+
+
+checkpoint split_labels:
+    input:
+        unpack(build_labelmap_path)
     params:
-        bids_dir=config["bids_dir"],
+        bids_dir=choose_root,
     output:
         binary_dir=directory(
             bids(
                 root=str(Path(config["output_dir"]) / "labelmerge-work"),
                 suffix="dseg",
-                desc=config.get("base_desc", None),
                 **inputs["labelmap"].input_wildcards
-            )
-        ),
-    # TODO: Update container that has appropriate dependencies
-    # container:
-    #     "docker://khanlab/neuroglia-core"
-    script:
-        "../scripts/label_split.py"
-
-
-checkpoint split_overlay_labels:
-    input:
-        labelmap=bids(
-            root=config["bids_dir"],
-            desc=config.get("overlay_desc", None),
-            datatype="anat",
-            suffix="dseg.nii.gz",
-            **inputs["labelmap"].input_wildcards
-        ),
-    params:
-        bids_dir=config["overlay_bids_dir"],
-    output:
-        binary_dir=directory(
-            str(
-                Path(
-                    bids(
-                        root=str(Path(config["output_dir"]) / "labelmerge-work"),
-                        suffix="dseg",
-                        desc=config.get("overlay_desc", None),
-                        **overlay["labelmap"].input_wildcards
-                    )
-                )
             )
         ),
     # TODO: Update container that has appropriate dependencies
@@ -75,17 +63,18 @@ checkpoint split_overlay_labels:
 
 rule aggregate:
     input:
-        base_labels=partial(aggregate_input, checkpoint=checkpoints.split_base_labels),
-        overlay_labels=partial(
-            aggregate_input, checkpoint=checkpoints.split_overlay_labels
-        ),
+        unpack(aggregate_inputs),
     output:
         touch(
             bids(
                 root=str(Path(config["output_dir"]) / "aggregated"),
                 suffix="aggregated",
                 desc="combined",
-                **inputs["labelmap"].input_wildcards
+                **dict(
+                    item
+                    for item in inputs["labelmap"].input_wildcards.items()
+                    if item[0] != "desc"
+                )
             )
         ),
     shell:
