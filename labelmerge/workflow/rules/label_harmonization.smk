@@ -15,25 +15,24 @@ def aggregate_input(wildcards, checkpoint):
     )
 
 
-
-
-
 checkpoint split_base_labels:
     input:
-        labelmap=inputs["labelmap"].input_path,
+        labelmap=bids(
+            root=config["bids_dir"],
+            desc=config.get("base_desc", None),
+            datatype="anat",
+            suffix="dseg.nii.gz",
+            **inputs["labelmap"].input_wildcards
+        ),
     params:
         bids_dir=config["bids_dir"],
     output:
         binary_dir=directory(
-            str(
-                Path(
-                    bids(
-                        root=str(Path(config["output_dir"]) / "labelmerge-work"),
-                        suffix="dseg",
-                        desc=config.get("base_desc", None),
-                        **inputs["labelmap"].input_wildcards
-                    )
-                )
+            bids(
+                root=str(Path(config["output_dir"]) / "labelmerge-work"),
+                suffix="dseg",
+                desc=config.get("base_desc", None),
+                **inputs["labelmap"].input_wildcards
             )
         ),
     # TODO: Update container that has appropriate dependencies
@@ -45,7 +44,13 @@ checkpoint split_base_labels:
 
 checkpoint split_overlay_labels:
     input:
-        labelmap=overlay["labelmap"].input_path,
+        labelmap=bids(
+            root=config["bids_dir"],
+            desc=config.get("overlay_desc", None),
+            datatype="anat",
+            suffix="dseg.nii.gz",
+            **inputs["labelmap"].input_wildcards
+        ),
     params:
         bids_dir=config["overlay_bids_dir"],
     output:
@@ -71,7 +76,9 @@ checkpoint split_overlay_labels:
 rule aggregate:
     input:
         base_labels=partial(aggregate_input, checkpoint=checkpoints.split_base_labels),
-        overlay_labels=partial(aggregate_input, checkpoint=checkpoints.split_overlay_labels),
+        overlay_labels=partial(
+            aggregate_input, checkpoint=checkpoints.split_overlay_labels
+        ),
     output:
         touch(
             bids(

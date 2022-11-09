@@ -2,12 +2,16 @@
 import glob
 from pathlib import Path
 from sys import exit
+import re
 
 from bids.layout import parse_file_entities
 import nibabel as nib
 import numpy as np
 import pandas as pd
 from snakebids import bids
+
+
+ALPHANUMERIC_RE = re.compile(r"[^a-zA-Z\d]")
 
 
 def load_atlas(atlas_path):
@@ -55,7 +59,9 @@ def load_metadata(atlas_path, bids_dir):
 
     # Read associated file and create new column storing description
     metadata = pd.read_csv(tsv_file, sep="\t")
-    metadata["BIDS Name"] = metadata["Name"].str.title().str.replace(" ", "")
+    metadata["BIDS Name"] = (
+        metadata["Name"].str.title().str.replace(ALPHANUMERIC_RE, "", regex=True)
+    )
 
     return metadata
 
