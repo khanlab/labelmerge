@@ -38,4 +38,7 @@ rule all:
             zip,
             **inputs["labelmap"].input_zip_lists
         ),
+        expand(
+            rules.config_tsv.output["config_tsv"], zip, **inputs["labelmap"].input_zip_lists
+        ),
     default_target: True

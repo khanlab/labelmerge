@@ -12,6 +12,17 @@ def split_labels_path(wildcards):
     )
 
 
+def aggregate_metadata(wildcards):
+    return {
+        "base_metadata": build_metadata_path(
+            dict(wildcards, desc=config["base_desc"])
+        ),
+        "overlay_metadata": build_metadata_path(
+            dict(wildcards, desc=config["overlay_desc"])
+        ),
+    }
+
+
 def aggregate_inputs(wildcards):
     base_mask_path = split_labels_path(dict(wildcards, desc=config["base_desc"]))
     overlay_mask_path = split_labels_path(dict(wildcards, desc=config["overlay_desc"]))
@@ -111,6 +122,23 @@ checkpoint split_labels:
     script:
         "../scripts/label_split.py"
 
+
+rule config_tsv:
+    input:
+        unpack(aggregate_metadata)
+    output:
+        config_tsv=bids(
+            root=str(Path(config["output_dir"]) / "run_config"),
+            suffix="config.tsv",
+            desc="combined",
+            **dict(
+                item
+                for item in inputs["labelmap"].input_wildcards.items()
+                if item[0] != "desc"
+            )
+        )
+    script:
+        "../scripts/assemble_priority.py"
 
 rule aggregate:
     input:

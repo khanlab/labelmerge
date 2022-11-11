@@ -60,7 +60,7 @@ def load_metadata(atlas_path, bids_dir):
     # Read associated file and create new column storing description
     metadata = pd.read_csv(tsv_file, sep="\t")
     metadata["BIDS Name"] = (
-        metadata["Name"].str.title().str.replace(ALPHANUMERIC_RE, "", regex=True)
+        metadata["name"].str.title().str.replace(ALPHANUMERIC_RE, "", regex=True)
     )
 
     return metadata
@@ -88,7 +88,7 @@ def label_split(atlas_path, output_dir, smk_wildcards, bids_dir):
 
         # Grab label description
         try:
-            label_desc = atlas_metadata[atlas_metadata["Index"] == int(label)][
+            label_desc = atlas_metadata[atlas_metadata["index"] == int(label)][
                 "BIDS Name"
             ].values[0]
         except:
