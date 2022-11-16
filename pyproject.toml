@@ -38,19 +38,19 @@ build-backend = "poetry.core.masonry.api"
 setup = "pre-commit install"
 isort = "isort labelmerge/*.py"
 black = "black labelmerge -l 79"
+flake8 = "flake8 labelmerge --ignore=E501"
 snakefmt = "snakefmt labelmerge"
-quality = ["isort", "black", "snakefmt"]
+quality = ["isort", "black", "flake8", "snakefmt"]
 
 [tool.isort]
 profile = "black"
 multi_line_output = 3
 
-[tool.pylint.master]
-ignore-patterns = "^[0-9][0-9]+_,^test_"
+[tool.black]
+line-length = 79
 
-[tool.pylint.messages_control]
-disable = """
-    missing-function-docstring
-    missing-module-docstring
-    fixme
-"""
+[tool.flake8]
+ignore = 'E501'
+
+[tool.snakefmt]
+include = '\.smk$|^Snakefile'

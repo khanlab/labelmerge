@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import glob
 from pathlib import Path
+from sys import exit
 
 import nibabel as nib
 import numpy as np
@@ -23,7 +24,7 @@ def load_metadata(atlas_path, bids_dir, smk_wildcards):
     # Walk backwards to find dseg until bids_dir is hit
     tsv_file = None
     cur_dir = atlas_path.parent
-    while cur_dir != Path(bids_dir).parent and tsv_file == None:
+    while cur_dir != Path(bids_dir).parent and not tsv_file:
         # Check number of dseg files found
         dseg_files = list(glob.iglob(f"{cur_dir}/*dseg.tsv"))
         num_dsegs = len(dseg_files)
@@ -76,10 +77,11 @@ def label_split(atlas_path, output_dir, smk_wildcards, bids_dir):
             label_desc = atlas_metadata[atlas_metadata["Index"] == int(label)][
                 "BIDS Name"
             ].values[0]
-        except:
-            raise ValueError(
-                f"Label f{int(label)} does not exist in the associated tsv file"
+        except IndexError:
+            print(
+                f"MetadataError: Label {int(label)} does not exist in the associated tsv file"
             )
+            exit(1)
 
         # Set file name
         label_fname = Path(
@@ -91,8 +93,8 @@ def label_split(atlas_path, output_dir, smk_wildcards, bids_dir):
 
 if __name__ == "__main__":
     label_split(
-        atlas_path=snakemake.input["labelmap"],
-        output_dir=snakemake.output["binary_dir"],
-        smk_wildcards=snakemake.wildcards,
-        bids_dir=snakemake.params["bids_dir"],
+        atlas_path=snakemake.input["labelmap"],  # noqa: F821
+        output_dir=snakemake.output["binary_dir"],  # noqa: F821
+        smk_wildcards=snakemake.wildcards,  # noqa: F821
+        bids_dir=snakemake.params["bids_dir"],  # noqa: F821
     )
