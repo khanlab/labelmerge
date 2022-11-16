@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import glob
 from pathlib import Path
+from sys import exit
 
 import nibabel as nib
 import numpy as np
@@ -77,9 +78,10 @@ def label_split(atlas_path, output_dir, smk_wildcards, bids_dir):
                 "BIDS Name"
             ].values[0]
         except IndexError:
-            raise ValueError(
-                f"Label {int(label)} does not exist in the associated tsv file"
+            print(
+                f"MetadataError: Label {int(label)} does not exist in the associated tsv file"
             )
+            exit(1)
 
         # Set file name
         label_fname = Path(
