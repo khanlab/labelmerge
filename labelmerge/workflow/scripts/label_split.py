@@ -76,9 +76,9 @@ def label_split(atlas_path, output_dir, smk_wildcards, bids_dir):
             label_desc = atlas_metadata[atlas_metadata["Index"] == int(label)][
                 "BIDS Name"
             ].values[0]
-        except:  # noqa: E722
+        except IndexError:
             raise ValueError(
-                f"Label f{int(label)} does not exist in the associated tsv file"
+                f"Label {int(label)} does not exist in the associated tsv file"
             )
 
         # Set file name
