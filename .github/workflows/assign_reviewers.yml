@@ -1,3 +1,4 @@
+---
 name: Assign reviewer
 
 on:
@@ -13,4 +14,4 @@ jobs:
       - name: Assign reviewer
         uses: kentaro-m/auto-assign-action@v1.1.2
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
