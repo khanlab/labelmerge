@@ -50,6 +50,9 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root --with dev
 
+      - name: yamlfix
+        run: poetry run poe yamlfix
+
       - name: isort
         run: poetry run poe isort
 
