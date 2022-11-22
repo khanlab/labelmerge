@@ -40,7 +40,7 @@ build-backend = "poetry.core.masonry.api"
 setup = "pre-commit install"
 yamlfix = { shell = "find . -type f \\( -iname \\*.yaml -o -iname \\*.yml ! -iname snakemake* ! -iname snakebids* \\) -exec yamlfix {} \\;" }
 isort = "isort labelmerge/*.py"
-black = "black labelmerge -l 79"
+black = "black labelmerge"
 flake8 = "flake8 labelmerge --ignore=E501"
 snakefmt = "snakefmt labelmerge"
 quality = ["yamlfix", "isort", "black", "flake8", "snakefmt"]
@@ -56,4 +56,5 @@ line-length = 79
 ignore = 'E501'
 
 [tool.snakefmt]
+line_length = 79
 include = '\.smk$|^Snakefile'
