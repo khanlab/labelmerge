@@ -41,7 +41,7 @@ setup = "pre-commit install"
 yamlfix = { shell = "find . -type f \\( -iname \\*.yaml -o -iname \\*.yml ! -iname snakemake* ! -iname snakebids* \\) -exec yamlfix {} \\;" }
 isort = "isort labelmerge/*.py"
 black = "black labelmerge"
-flake8 = "flake8 labelmerge --ignore=E501"
+flake8 = "flake8 labelmerge"
 snakefmt = "snakefmt labelmerge"
 quality = ["yamlfix", "isort", "black", "flake8", "snakefmt"]
 
