@@ -1,64 +1,10 @@
 from functools import partial
 import glob
 from pathlib import Path
+import re
+
 from bids.layout import parse_file_entities
-from snakebids import bids
-
-
-def split_labels_path(wildcards):
-    return str(
-        Path(checkpoints.split_labels.get(**wildcards).output.binary_dir)
-        / Path(bids(label="{label_idx}", suffix="mask.nii.gz", **wildcards)).name
-    )
-
-
-def aggregate_metadata(wildcards):
-    return {
-        "base_metadata": build_metadata_path(
-            dict(wildcards, desc=config["base_desc"])
-        ),
-        "overlay_metadata": build_metadata_path(
-            dict(wildcards, desc=config["overlay_desc"])
-        ),
-    }
-
-
-def aggregate_inputs(wildcards):
-    base_mask_path = split_labels_path(dict(wildcards, desc=config["base_desc"]))
-    overlay_mask_path = split_labels_path(dict(wildcards, desc=config["overlay_desc"]))
-    return {
-        "base_masks": expand(
-            base_mask_path,
-            label_idx=glob_wildcards(base_mask_path).label_idx,
-        ),
-        "base_metadata": build_metadata_path(
-            dict(wildcards, desc=config["base_desc"])
-        ),
-        "overlay_masks": expand(
-            overlay_mask_path,
-            label_idx=glob_wildcards(overlay_mask_path).label_idx,
-        ),
-        "overlay_metadata": build_metadata_path(
-            dict(wildcards, desc=config["overlay_desc"])
-        ),
-    }
-
-
-def choose_root(wildcards):
-    return (
-        config["bids_dir"]
-        if wildcards["desc"] == config["base_desc"]
-        else config["overlay_bids_dir"]
-    )
-
-
-def build_labelmap_path(wildcards):
-    return bids(
-        root=choose_root(wildcards),
-        datatype="anat",
-        suffix="dseg.nii.gz",
-        **inputs["labelmap"].input_wildcards,
-    )
+from snakebids import bids, generate_inputs
 
 
 def load_metadata(atlas_path, bids_dir):
@@ -98,63 +44,38 @@ def load_metadata(atlas_path, bids_dir):
 
 
 def build_metadata_path(wildcards):
-    atlas_path = expand(build_labelmap_path(wildcards), **wildcards)[0]
-    return load_metadata(Path(atlas_path), choose_root(wildcards))
+    base_metadata = load_metadata(
+        Path(expand(base_inputs["labelmap"].input_path, **wildcards)[0]),
+        config["bids_dir"],
+    )
+    overlay_metadata = load_metadata(
+        Path(expand(overlay_inputs["labelmap"].input_path, **wildcards)[0]),
+        config["overlay_bids_dir"],
+    )
+    return {"base_metadata": base_metadata, "overlay_metadata": overlay_metadata}
 
 
-checkpoint split_labels:
+rule merge_labels:
     input:
-        labelmap=build_labelmap_path,
-        metadata=build_metadata_path,
-    params:
-        bids_dir=choose_root,
+        unpack(build_metadata_path),
+        base_map=base_inputs["labelmap"].input_path,
+        overlay_map=overlay_inputs["labelmap"].input_path,
     output:
-        binary_dir=directory(
-            bids(
-                root=str(Path(config["output_dir"]) / "labelmerge-work"),
-                suffix="dseg",
-                **inputs["labelmap"].input_wildcards
-            )
-        ),
-    # TODO: Update container that has appropriate dependencies
-    # container:
-    #     "docker://khanlab/neuroglia-core"
-    script:
-        "../scripts/label_split.py"
-
-
-rule config_tsv:
-    input:
-        unpack(aggregate_metadata)
-    output:
-        config_tsv=bids(
-            root=str(Path(config["output_dir"]) / "run_config"),
-            suffix="config.tsv",
+        merged_map=bids(
+            root=str(Path(config["output_dir"]) / "combined"),
+            suffix="dseg.nii.gz",
             desc="combined",
-            **dict(
-                item
-                for item in inputs["labelmap"].input_wildcards.items()
-                if item[0] != "desc"
-            )
-        )
-    script:
-        "../scripts/assemble_priority.py"
-
-rule aggregate:
-    input:
-        unpack(aggregate_inputs),
-    output:
-        touch(
-            bids(
-                root=str(Path(config["output_dir"]) / "aggregated"),
-                suffix="aggregated",
-                desc="combined",
-                **dict(
-                    item
-                    for item in inputs["labelmap"].input_wildcards.items()
-                    if item[0] != "desc"
-                )
-            )
+            **base_inputs["labelmap"].input_wildcards,
         ),
+        merged_metadata=bids(
+            root=str(Path(config["output_dir"]) / "combined"),
+            suffix="dseg.tsv",
+            desc="combined",
+            **base_inputs["labelmap"].input_wildcards,
+        ),
+    resources:
+        script=str(Path(workflow.basedir) / "scripts" / "labelmerge.py"),
     shell:
-        "echo {input}"
+        "python3 {resources.script} {input.base_map} {input.base_metadata} "
+        "{input.overlay_map} {input.overlay_metadata} "
+        "{output.merged_map} {output.merged_metadata}"
