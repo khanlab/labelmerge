@@ -72,6 +72,7 @@ parse_args:
   --overlay_bids_dir:
     help: Directory containing labelmaps to be overlaid on the base input labelmaps.
     nargs: '?'
+    type: Path
   --base_desc:
     help: Description entity for base labelmaps
     nargs: '?'
