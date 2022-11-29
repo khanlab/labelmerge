@@ -1,53 +1,81 @@
+from functools import partial
+import glob
 from pathlib import Path
-from snakebids import bids
+import re
+
+from bids.layout import parse_file_entities
+from snakebids import bids, generate_inputs
 
 
-checkpoint split_labels:
-    input:
-        labelmap=inputs["labelmap"].input_path,
-    params:
-        bids_dir=config["bids_dir"],
-    output:
-        binary_dir=directory(
-            str(
-                Path(
-                    bids(
-                        root=str(Path(config["output_dir"]) / "labelmerge-work"),
-                        suffix="dseg",
-                        **inputs["labelmap"].input_wildcards
+def load_metadata(atlas_path, bids_dir):
+    """Load metadata associated with atlas"""
+    # Walk backwards to find dseg until bids_dir is hit
+    tsv_file = None
+    cur_dir = atlas_path.parent
+    atlas_entities = parse_file_entities(atlas_path)
+    del atlas_entities["extension"]
+    while cur_dir != Path(bids_dir).parent and tsv_file is None:
+        # Check number of dseg files found
+        dseg_files = list(glob.iglob(f"{cur_dir}/*dseg.tsv"))
+
+        for candidate in dseg_files:
+            possible = True
+            candidate_entities = parse_file_entities(candidate)
+            del candidate_entities["extension"]
+            for key, val in candidate_entities.items():
+                if (key not in atlas_entities) or (atlas_entities[key] != val):
+                    possible = False
+            if possible:
+                if tsv_file is None:
+                    tsv_file = candidate
+                else:
+                    raise ValueError(
+                        "Multiple applicable metadata files applicable at this level "
+                        "of the directory hierarchy"
                     )
-                )
-            )
-        ),
-    # TODO: Update container that has appropriate dependencies
-    # container:
-    #     "docker://khanlab/neuroglia-core"
-    script:
-        "../scripts/label_split.py"
+        # Move up a directory
+        cur_dir = cur_dir.parent
+
+    # If still no file found
+    if not tsv_file:
+        raise FileNotFoundError("No associated tsv file found")
+
+    return tsv_file
 
 
-def aggregate_input(wildcards):
-    checkpoint_output = checkpoints.split_labels.get(**wildcards).output.binary_dir
-    label_fname = Path(
-        bids(label="{label_idx}", suffix="mask.nii.gz", **wildcards)
-    ).name
-    label_mask_path = str(Path(checkpoint_output) / label_fname)
-    return expand(
-        label_mask_path,
-        label_idx=glob_wildcards(label_mask_path).label_idx,
+def build_metadata_path(wildcards):
+    base_metadata = load_metadata(
+        Path(expand(base_inputs["labelmap"].input_path, **wildcards)[0]),
+        config["bids_dir"],
     )
+    overlay_metadata = load_metadata(
+        Path(expand(overlay_inputs["labelmap"].input_path, **wildcards)[0]),
+        config["overlay_bids_dir"],
+    )
+    return {"base_metadata": base_metadata, "overlay_metadata": overlay_metadata}
 
 
-rule aggregate:
+rule merge_labels:
     input:
-        aggregate_input,
+        unpack(build_metadata_path),
+        base_map=base_inputs["labelmap"].input_path,
+        overlay_map=overlay_inputs["labelmap"].input_path,
     output:
-        touch(
-            bids(
-                root=str(Path(config["output_dir"]) / "aggregated"),
-                suffix="aggregated",
-                **inputs["labelmap"].input_wildcards
-            )
+        merged_map=bids(
+            root=str(Path(config["output_dir"]) / "combined"),
+            suffix="dseg.nii.gz",
+            desc="combined",
+            **base_inputs["labelmap"].input_wildcards,
         ),
+        merged_metadata=bids(
+            root=str(Path(config["output_dir"]) / "combined"),
+            suffix="dseg.tsv",
+            desc="combined",
+            **base_inputs["labelmap"].input_wildcards,
+        ),
+    resources:
+        script=str(Path(workflow.basedir) / "scripts" / "labelmerge.py"),
     shell:
-        "echo {input}"
+        "python3 {resources.script} {input.base_map} {input.base_metadata} "
+        "{input.overlay_map} {input.overlay_metadata} "
+        "{output.merged_map} {output.merged_metadata}"

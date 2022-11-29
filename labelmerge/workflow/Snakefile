@@ -1,17 +1,47 @@
 # ---- begin snakebids boilerplate ----------------------------------------------
 
+from functools import partial
+
 import snakebids
-from snakebids import bids
+from snakebids import bids, generate_inputs
 
 
 configfile: "config/snakebids.yml"
 
 
-inputs = snakebids.generate_inputs(
+class ConfigError(Exception):
+    """Error raised if the app is misconfigured."""
+
+
+if not all([config[key] for key in ["overlay_bids_dir", "base_desc", "overlay_desc"]]):
+    raise ConfigError(
+        "overlay_bids_dir, base_desc, and overlay_desc must all be defined."
+    )
+if (
+    Path(config["overlay_bids_dir"]).resolve() == Path(config["bids_dir"]).resolve()
+) and (config["base_desc"] == config["overlay_desc"]):
+    raise ConfigError("The base and overlay images are identical.")
+
+
+base_config = config["pybids_inputs"].copy()
+base_config["labelmap"]["filters"]["desc"] = config["base_desc"]
+overlay_config = config["pybids_inputs"].copy()
+overlay_config["labelmap"]["filters"]["desc"] = config["overlay_desc"]
+
+
+base_inputs = generate_inputs(
     bids_dir=config["bids_dir"],
-    pybids_inputs=config["pybids_inputs"],
     pybids_config=["bids", "derivatives"],
     derivatives=config["derivatives"],
+    pybids_inputs=base_config,
+    participant_label=config["participant_label"],
+    use_bids_inputs=True,
+)
+overlay_inputs = generate_inputs(
+    bids_dir=config.get("overlay_bids_dir", config["bids_dir"]),
+    pybids_config=["bids", "derivatives"],
+    derivatives=config["derivatives"],
+    pybids_inputs=overlay_config,
     participant_label=config["participant_label"],
     use_bids_inputs=True,
 )
@@ -31,5 +61,14 @@ include: "rules/label_harmonization.smk"
 
 rule all:
     input:
-        expand(rules.aggregate.output[0], zip, **inputs["labelmap"].input_zip_lists),
+        expand(
+            rules.merge_labels.output["merged_map"],
+            zip,
+            **base_inputs["labelmap"].input_zip_lists
+        ),
+        expand(
+            rules.merge_labels.output["merged_metadata"],
+            zip,
+            **base_inputs["labelmap"].input_zip_lists
+        ),
     default_target: True
