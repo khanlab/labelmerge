@@ -13,7 +13,7 @@ RUN mkdir -p /opt \
     && poetry config virtualenvs.create false \
     && poetry install --only main \
     && apt-get purge -y -q g++ \
-    && apt-get --purge -y -qq autoremove \
+    && apt-get --purge -y -qq autoremove 
     
 # Stage: runtime
 FROM build AS runtime

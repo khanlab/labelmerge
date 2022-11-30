@@ -1,5 +1,6 @@
 # ---- begin snakebids boilerplate ----------------------------------------------
 
+from copy import deepcopy
 from functools import partial
 
 import snakebids
@@ -23,11 +24,10 @@ if (
     raise ConfigError("The base and overlay images are identical.")
 
 
-base_config = config["pybids_inputs"].copy()
+base_config = deepcopy(config["pybids_inputs"])
 base_config["labelmap"]["filters"]["desc"] = config["base_desc"]
-overlay_config = config["pybids_inputs"].copy()
+overlay_config = deepcopy(config["pybids_inputs"])
 overlay_config["labelmap"]["filters"]["desc"] = config["overlay_desc"]
-
 
 base_inputs = generate_inputs(
     bids_dir=config["bids_dir"],
