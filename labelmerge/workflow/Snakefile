@@ -14,12 +14,15 @@ class ConfigError(Exception):
     """Error raised if the app is misconfigured."""
 
 
-if not all([config[key] for key in ["overlay_bids_dir", "base_desc", "overlay_desc"]]):
+if not all(
+    [config[key] for key in ["overlay_bids_dir", "base_desc", "overlay_desc"]]
+):
     raise ConfigError(
         "overlay_bids_dir, base_desc, and overlay_desc must all be defined."
     )
 if (
-    Path(config["overlay_bids_dir"]).resolve() == Path(config["bids_dir"]).resolve()
+    Path(config["overlay_bids_dir"]).resolve()
+    == Path(config["bids_dir"]).resolve()
 ) and (config["base_desc"] == config["overlay_desc"]):
     raise ConfigError("The base and overlay images are identical.")
 

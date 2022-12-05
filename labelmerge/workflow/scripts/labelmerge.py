@@ -72,7 +72,9 @@ def main():
     overlay_data, _, _ = load_atlas(Path(args.overlay_map))
     overlay_metadata = pd.read_csv(args.overlay_metadata, sep="\t")
     base_ds = split_labels(base_data, base_metadata, prefix="base ")
-    overlay_ds = split_labels(overlay_data, overlay_metadata, prefix="overlay ")
+    overlay_ds = split_labels(
+        overlay_data, overlay_metadata, prefix="overlay "
+    )
     merged_map, merged_metadata = merge_labels(base_ds, overlay_ds)
     merged_img = nib.Nifti1Image(
         dataobj=merged_map, affine=base_affine, header=base_header
