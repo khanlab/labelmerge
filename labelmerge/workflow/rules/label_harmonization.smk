@@ -52,7 +52,10 @@ def build_metadata_path(wildcards):
         Path(expand(overlay_inputs["labelmap"].input_path, **wildcards)[0]),
         config["overlay_bids_dir"],
     )
-    return {"base_metadata": base_metadata, "overlay_metadata": overlay_metadata}
+    return {
+        "base_metadata": base_metadata,
+        "overlay_metadata": overlay_metadata,
+    }
 
 
 rule merge_labels:
