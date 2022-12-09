@@ -18,8 +18,17 @@ def load_atlas(atlas_path):
     return data, header, affine
 
 
+class MetadataError(Exception):
+    """Error raised when there's an issue with the metadata."""
+
+
 def assemble_mask(atlas, metadata, label, prefix=""):
-    name = metadata[metadata["index"] == label].name.iloc[0]
+    try:
+        name = metadata[metadata["index"] == label].name.iloc[0]
+    except IndexError as err:
+        raise MetadataError(
+            f"Label with index {label} from {prefix}atlas not found in metadata table."
+        ) from err
     return (
         f"{prefix}{name}",
         xr.DataArray(atlas == label, dims=["x", "y", "z"]),
