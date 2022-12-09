@@ -38,15 +38,15 @@ def split_labels(atlas, metadata, prefix=""):
 
 
 def merge_labels(base_ds, overlay_ds):
-    out_arr = np.zeros(list(dim for dim in base_ds.dims.values()))
+    out_arr = np.zeros(list(dim for dim in base_ds.dims.values()), dtype=np.int_)
     out_labels = list(range(len(base_ds) + len(overlay_ds)))
     out_names = out_labels.copy()
 
     overall_idx = 0
     for dataset in [base_ds, overlay_ds]:
         for name, arr in dataset.items():
-            out_arr[arr] = overall_idx + 1
-            out_labels[overall_idx] = overall_idx + 1
+            out_arr[arr] = int(overall_idx + 1)
+            out_labels[overall_idx] = int(overall_idx + 1)
             out_names[overall_idx] = name
             overall_idx += 1
     out_metadata = pd.DataFrame({"index": out_labels, "name": out_names})
