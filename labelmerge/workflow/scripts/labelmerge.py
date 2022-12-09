@@ -45,7 +45,7 @@ def merge_labels(base_ds, overlay_ds):
     overall_idx = 0
     for dataset in [base_ds, overlay_ds]:
         for name, arr in dataset.items():
-            out_arr[arr] = int(overall_idx)
+            out_arr[arr] = int(overall_idx + 1)
             out_labels[overall_idx] = int(overall_idx + 1)
             out_names[overall_idx] = name
             overall_idx += 1
