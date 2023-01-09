@@ -79,6 +79,12 @@ parse_args:
   --overlay_desc:
     help: Description entity for overlay labelmaps
     nargs: '?'
+  --base_exceptions:
+    help: Space separated integer labels from the base labelmap to keep over overlay labels at the same voxels.
+    nargs: '*'
+  --overlay_exceptions:
+    help: Space separated integer labels from the overlay image to discard.
+    nargs: '*'
 
 # Workflow specific config
 
