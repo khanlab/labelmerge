@@ -40,11 +40,22 @@ build-backend = "poetry.core.masonry.api"
 [tool.poe.tasks]
 setup = "pre-commit install"
 yamlfix = { shell = "find . -type f \\( -iname \\*.yaml -o -iname \\*.yml ! -iname snakemake* ! -iname snakebids* \\) -exec yamlfix {} \\;" }
-isort = "isort labelmerge/*.py"
+yamlfix-check = { shell = "find . -type f \\( -iname \\*.yaml -o -iname \\*.yml ! -iname snakemake* ! -iname snakebids* \\) -exec yamlfix --check {} \\;" }
+isort = "isort labelmerge"
+isort-check = "isort -c labelmerge"
 black = "black labelmerge"
+black-check = "black --check labelmerge"
 flake8 = "flake8 labelmerge"
 snakefmt = "snakefmt labelmerge"
+snakefmt-check = "snakefmt --check labelmerge"
 quality = ["yamlfix", "isort", "black", "flake8", "snakefmt"]
+quality-check = [
+    "yamlfix-check",
+    "isort-check",
+    "black-check",
+    "flake8",
+    "snakefmt-check",
+]
 
 [tool.isort]
 profile = "black"
@@ -52,9 +63,6 @@ multi_line_output = 3
 
 [tool.black]
 line-length = 79
-
-[tool.flake8]
-ignore = 'E501'
 
 [tool.snakefmt]
 line_length = 79

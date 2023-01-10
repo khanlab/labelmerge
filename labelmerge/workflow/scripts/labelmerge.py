@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 from __future__ import annotations
+
 from argparse import ArgumentParser
 from os import PathLike
 from pathlib import Path
 
 import nibabel as nib
 import numpy as np
-from numpy.typing import ArrayLike
 import pandas as pd
 import xarray as xr
+from numpy.typing import ArrayLike
 
 
 def load_atlas(atlas_path: PathLike):
@@ -35,7 +36,8 @@ def assemble_mask(
         name: str = metadata[metadata["index"] == label].name.iloc[0]
     except IndexError as err:
         raise MetadataError(
-            f"Label with index {label} from {prefix}atlas not found in metadata table."
+            f"Label with index {label} from {prefix}atlas not found in "
+            "metadata table."
         ) from err
     return (
         f"{prefix}{name}",
@@ -121,8 +123,8 @@ def gen_parser() -> ArgumentParser:
         "--base_exceptions",
         nargs="*",
         help=(
-            "Space separated list of integer labels from the base image to keep over "
-            "overlay labels at the same voxels."
+            "Space separated list of integer labels from the base image to "
+            "keep over overlay labels at the same voxels."
         ),
         type=int,
     )
@@ -130,7 +132,8 @@ def gen_parser() -> ArgumentParser:
         "--overlay_exceptions",
         nargs="*",
         help=(
-            "Space separated list of integer labels from the overlay image to discard."
+            "Space separated list of integer labels from the overlay image to "
+            "discard."
         ),
         type=int,
     )
@@ -145,7 +148,9 @@ def main():
     overlay_data, _, _ = load_atlas(Path(args.overlay_map))
     overlay_metadata = pd.read_csv(args.overlay_metadata, sep="\t")
     base_exceptions = args.base_exceptions if args.base_exceptions else []
-    overlay_exceptions = args.overlay_exceptions if args.overlay_exceptions else []
+    overlay_exceptions = (
+        args.overlay_exceptions if args.overlay_exceptions else []
+    )
     base_datasets = split_labels(
         base_data,
         base_metadata,
