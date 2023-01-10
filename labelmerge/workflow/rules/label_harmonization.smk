@@ -77,8 +77,12 @@ rule merge_labels:
             **base_inputs["labelmap"].input_wildcards,
         ),
     params:
-        base_exceptions=f"--base_exceptions {' '.join(config['base_exceptions'])}" if config.get("base_exceptions") else "",
-        overlay_exceptions=f"--overlay_exceptions {' '.join(config['overlay_exceptions'])}" if config.get("overlay_exceptions") else "",
+        base_exceptions=f"--base_exceptions {' '.join(config['base_exceptions'])}"
+        if config.get("base_exceptions")
+        else "",
+        overlay_exceptions=f"--overlay_exceptions {' '.join(config['overlay_exceptions'])}"
+        if config.get("overlay_exceptions")
+        else "",
     resources:
         script=str(Path(workflow.basedir) / "scripts" / "labelmerge.py"),
     shell:

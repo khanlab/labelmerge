@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 from __future__ import annotations
+
 from argparse import ArgumentParser
 from os import PathLike
 from pathlib import Path
 
 import nibabel as nib
 import numpy as np
-from numpy.typing import ArrayLike
 import pandas as pd
 import xarray as xr
+from numpy.typing import ArrayLike
 
 
 def load_atlas(atlas_path: PathLike):
@@ -145,7 +146,9 @@ def main():
     overlay_data, _, _ = load_atlas(Path(args.overlay_map))
     overlay_metadata = pd.read_csv(args.overlay_metadata, sep="\t")
     base_exceptions = args.base_exceptions if args.base_exceptions else []
-    overlay_exceptions = args.overlay_exceptions if args.overlay_exceptions else []
+    overlay_exceptions = (
+        args.overlay_exceptions if args.overlay_exceptions else []
+    )
     base_datasets = split_labels(
         base_data,
         base_metadata,
