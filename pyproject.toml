@@ -31,6 +31,7 @@ poethepoet = "^0.13.1"
 pre-commit = "^2.17.0"
 snakefmt = "^0.6.1"
 yamlfix = "^1.1.0"
+mypy = "^0.991"
 
 [build-system]
 requires = ["poetry-core"]
