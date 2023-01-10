@@ -33,6 +33,9 @@ snakefmt = "^0.6.1"
 yamlfix = "^1.1.0"
 mypy = "^0.991"
 
+[tool.poetry.scripts]
+labelmerge = 'labelmerge.run:main'
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
