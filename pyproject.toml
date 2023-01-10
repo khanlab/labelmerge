@@ -64,9 +64,6 @@ multi_line_output = 3
 [tool.black]
 line-length = 79
 
-[tool.flake8]
-ignore = 'E501'
-
 [tool.snakefmt]
 line_length = 79
 include = '\.smk$|^Snakefile'

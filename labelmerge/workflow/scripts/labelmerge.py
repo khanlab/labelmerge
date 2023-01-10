@@ -36,7 +36,8 @@ def assemble_mask(
         name: str = metadata[metadata["index"] == label].name.iloc[0]
     except IndexError as err:
         raise MetadataError(
-            f"Label with index {label} from {prefix}atlas not found in metadata table."
+            f"Label with index {label} from {prefix}atlas not found in "
+            "metadata table."
         ) from err
     return (
         f"{prefix}{name}",
@@ -122,8 +123,8 @@ def gen_parser() -> ArgumentParser:
         "--base_exceptions",
         nargs="*",
         help=(
-            "Space separated list of integer labels from the base image to keep over "
-            "overlay labels at the same voxels."
+            "Space separated list of integer labels from the base image to "
+            "keep over overlay labels at the same voxels."
         ),
         type=int,
     )
@@ -131,7 +132,8 @@ def gen_parser() -> ArgumentParser:
         "--overlay_exceptions",
         nargs="*",
         help=(
-            "Space separated list of integer labels from the overlay image to discard."
+            "Space separated list of integer labels from the overlay image to "
+            "discard."
         ),
         type=int,
     )
