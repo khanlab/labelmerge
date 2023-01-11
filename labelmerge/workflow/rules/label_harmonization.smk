@@ -83,10 +83,17 @@ rule merge_labels:
         overlay_exceptions=f"--overlay_exceptions {' '.join(config['overlay_exceptions'])}"
         if config.get("overlay_exceptions")
         else "",
+        base_drops=f"--base_drops {' '.join(config['base_drops'])}"
+        if config.get("base_drops")
+        else "",
+        overlay_drops=f"--overlay_drops {' '.join(config['overlay_drops'])}"
+        if config.get("overlay_drops")
+        else "",
     resources:
         script=str(Path(workflow.basedir) / "scripts" / "labelmerge.py"),
     shell:
         "python3 {resources.script} {input.base_map} {input.base_metadata} "
         "{input.overlay_map} {input.overlay_metadata} "
         "{output.merged_map} {output.merged_metadata} "
-        "{params.base_exceptions} {params.overlay_exceptions}"
+        "{params.base_exceptions} {params.overlay_exceptions} "
+        "{params.base_drops} {params.overlay_drops}"
