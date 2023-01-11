@@ -80,7 +80,13 @@ parse_args:
     help: Space separated integer labels from the base labelmap to keep over overlay labels at the same voxels.
     nargs: '*'
   --overlay_exceptions:
-    help: Space separated integer labels from the overlay image to discard.
+    help: Space separated integer labels from the overlay image to be overwritten by base labels at the same voxels.
+    nargs: '*'
+  --base_drops:
+    help: Space separated integer labels from the base image to drop from the output.
+    nargs: '*'
+  --overlay_drops:
+    help: Space separated integer labels from the overlay image to drop from the output.
     nargs: '*'
 
 # Workflow specific config
