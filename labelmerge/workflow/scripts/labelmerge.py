@@ -4,6 +4,7 @@ from __future__ import annotations
 from argparse import ArgumentParser
 from os import PathLike
 from pathlib import Path
+from typing import Optional
 
 import nibabel as nib
 import numpy as np
@@ -15,7 +16,7 @@ from numpy.typing import ArrayLike
 def load_atlas(atlas_path: PathLike):
     """Loading relevant atlas data"""
     atlas = nib.load(atlas_path)
-    data = atlas.get_fdata().astype(np.ushort)
+    data = atlas.get_fdata().astype(np.int_)
     header = atlas.header
     affine = atlas.affine
 
@@ -49,14 +50,25 @@ def split_labels(
     atlas: np.ndarray,
     metadata: pd.DataFrame,
     prefix: str = "",
-    exceptions: list[str] = [],
+    exceptions: Optional[list[str]] = None,
 ) -> list[xr.Dataset]:
+    if exceptions is None:
+        exceptions = []
     unique_vals = np.unique(atlas[atlas > 0])
+    all_labels: pd.Series[int] = metadata["index"]
+    if not set(unique_vals) <= set(all_labels):
+        unlabeled_vals = ", ".join(
+            str(val) for val in set(unique_vals) - set(all_labels)
+        )
+        raise MetadataError(
+            f"Labels with indices {unlabeled_vals} from {prefix}atlas not "
+            "found in metadata table"
+        )
     normal_ds = xr.Dataset(
         dict(
             [
                 assemble_mask(atlas, metadata, label, prefix)
-                for label in unique_vals
+                for label in all_labels
                 if label not in exceptions
             ]
         )
@@ -67,7 +79,7 @@ def split_labels(
         dict(
             [
                 assemble_mask(atlas, metadata, label, prefix)
-                for label in unique_vals
+                for label in all_labels
                 if label in exceptions
             ]
         )
