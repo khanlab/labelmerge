@@ -1,10 +1,10 @@
 #!/usr/bin/env python
+"""Script to merge two labelmaps with their BIDS metadata."""
 from __future__ import annotations
 
 from argparse import ArgumentParser
 from os import PathLike
 from pathlib import Path
-from typing import Optional
 
 import nibabel as nib
 import numpy as np
@@ -50,10 +50,13 @@ def split_labels(
     atlas: np.ndarray,
     metadata: pd.DataFrame,
     prefix: str = "",
-    exceptions: Optional[list[str]] = None,
+    exceptions: list[int] | None = None,
+    drops: list[int] | None = None,
 ) -> list[xr.Dataset]:
     if exceptions is None:
         exceptions = []
+    if drops is None:
+        drops = []
     unique_vals = np.unique(atlas[atlas > 0])
     all_labels: pd.Series[int] = metadata["index"]
     if not set(unique_vals) <= set(all_labels):
@@ -68,8 +71,8 @@ def split_labels(
         dict(
             [
                 assemble_mask(atlas, metadata, label, prefix)
-                for label in all_labels
-                if label not in exceptions
+                for label in unique_vals
+                if label not in exceptions + drops
             ]
         )
     )
@@ -145,7 +148,25 @@ def gen_parser() -> ArgumentParser:
         nargs="*",
         help=(
             "Space separated list of integer labels from the overlay image to "
-            "discard."
+            "be overwritten by labels from the base image."
+        ),
+        type=int,
+    )
+    parser.add_argument(
+        "--base_drops",
+        nargs="*",
+        help=(
+            "Space separated list of integer labels from the base image to "
+            "drop from the output map."
+        ),
+        type=int,
+    )
+    parser.add_argument(
+        "--overlay_drops",
+        nargs="*",
+        help=(
+            "Space separated list of integer labels from the overlay image to "
+            "drop from the output map."
         ),
         type=int,
     )
@@ -163,21 +184,28 @@ def main():
     overlay_exceptions = (
         args.overlay_exceptions if args.overlay_exceptions else []
     )
+    base_drops = args.base_drops if args.base_drops else []
+    overlay_drops = args.overlay_drops if args.overlay_drops else []
     base_datasets = split_labels(
         base_data,
         base_metadata,
         prefix="base ",
         exceptions=base_exceptions,
+        drops=base_drops,
     )
     overlay_datasets = split_labels(
         overlay_data,
         overlay_metadata,
         prefix="overlay ",
         exceptions=overlay_exceptions,
+        drops=overlay_drops,
     )
     # Note that overlay exceptions are ignored
     merged_map, merged_metadata = merge_labels(
-        base_datasets[0:1] + overlay_datasets[0:1] + base_datasets[1:]
+        overlay_datasets[1:]
+        + base_datasets[0:1]
+        + overlay_datasets[0:1]
+        + base_datasets[1:]
     )
     merged_img = nib.Nifti1Image(
         dataobj=merged_map, affine=base_affine, header=base_header
