@@ -1,2 +1,3 @@
 # Local poetry config
 poetry.toml
+**/__pycache__

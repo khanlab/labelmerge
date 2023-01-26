@@ -8,22 +8,15 @@ template: |
   $CHANGES
 categories:
   - title: 🚀 Features
-    labels:
-      - breaking
-      - enhancement
+    labels: [breaking, enhancement]
   - title: 🐛 Bug Fixes
-    labels:
-      - bug
+    labels: [bug]
   - title: 🧰 Maintenance
-    labels:
-      - maintenance
-      - test
+    labels: [maintenance, test]
   - title: 📝 Documentation
-    labels:
-      - documentation
+    labels: [documentation]
 
-exclude-labels:
-  - skip_changelog
+exclude-labels: [skip_changelog]
 
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: \<*_&    # You can add  # and @ to disable mentions, and add ` to disable code blocks.
@@ -33,13 +26,7 @@ version-resolver:
   #   labels:
   #     - 'breaking'
   minor:
-    labels:
-      - breaking
-      - enhancement
+    labels: [breaking, enhancement]
   patch:
-    labels:
-      - maintenance
-      - bug
-      - test
-      - documentation
+    labels: [maintenance, bug, test, documentation]
   default: patch
