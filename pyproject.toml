@@ -12,6 +12,9 @@ authors = [
     "Ali R. Khan"
 ]
 readme = "README.md"
+packages = [
+    { include = "labelmerge" }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
