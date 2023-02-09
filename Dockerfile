@@ -11,11 +11,12 @@ RUN mkdir -p /opt \
     && pip install --prefer-binary --no-cache-dir \
         poetry==1.2.2 \
     && poetry config virtualenvs.create false \
-    && poetry install --only main \
+    && poetry install --without dev \
     && apt-get purge -y -q g++ \
     && apt-get --purge -y -qq autoremove 
     
 # Stage: runtime
 FROM build AS runtime
 COPY ./labelmerge /opt/labelmerge
+RUN echo "alias labelmerge=/opt/labelmerge/run.py" >> ~/.bashrc
 ENTRYPOINT ["/opt/labelmerge/run.py"]
