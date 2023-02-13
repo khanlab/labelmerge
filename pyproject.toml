@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "labelmerge"
-version = "0.4.1-pre.2"
+version = "0.4.1"
 description = "Snakebids app for merging multiple label maps."
 authors = [
     "Jason Kai <tkai@uwo.ca>",
