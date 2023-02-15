@@ -4,6 +4,7 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/khanlab/labelmerge)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7636410.svg)](https://doi.org/10.5281/zenodo.7636410)
 
+Labelmerge: A BIDS app for merging multiple label maps and metadata into a single parcellation scheme.
 
 Examination of the brain has led to the creation and distribution of numerous parcellation schemes, studying various features or aspects including gross anatomy, cytoarchitecture, myeloarchitecture, functional connectivty, or structural connectivity. With the growing number of available schemes, there exists a need for methods to robustly merge different these different atlases from numerous sources depending on the aims of the specific study.  
 
