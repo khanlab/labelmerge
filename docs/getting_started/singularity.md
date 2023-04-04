@@ -21,7 +21,7 @@ the latest versioned container (replace `latest` with `vX.X.X` for a specific
 version).
 
 ```
-singularity pull docker://khanlab/scattr:latest
+singularity pull docker://khanlab/labelmerge:latest
 ```
 _Note: If you encounter any errors pulling the container from DockerHub, it may
 be because you are running out of disk space in your cache folders. You can 
@@ -32,10 +32,10 @@ export SINGULARITY_CACHEDIR=/YOURDIR/.cache/singularity
 ```
 
 
-Run SCATTR without any arguments to print the short help:
+Run Labelmerge without any arguments to print the short help:
 
 ```
-singularity run -e khanlab_scattr_latest.sif
+singularity run -e khanlab_labelmerge_latest.sif
 ```
 
 Use the `-h` option to get a detailed help listing:
@@ -54,7 +54,7 @@ singularity run -e khanlab_scattr_latest.sif --help-snakemake
 ## Running an example
 
 We will use the `test` folder found from the 
-[Github repository](https://github.com/khanlab/scattr/tree/main/test/) to
+[Github repository](https://github.com/khanlab/labelmerge/tree/main/test/) to
 demonstrate an example of how to run SCATTR:
 
 ```
