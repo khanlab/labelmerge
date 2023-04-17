@@ -53,7 +53,7 @@ singularity run -e khanlab_scattr_latest.sif --help-snakemake
 
 ## Running an example
 
-We will use the `test` folder found from the 
+** Provide test example for labelmerge - We will use the `test` folder found from the 
 [Github repository](https://github.com/khanlab/labelmerge/tree/main/test/) to
 demonstrate an example of how to run SCATTR:
 
@@ -63,17 +63,15 @@ singularity run -e khanlab_scattr_latest.sif test/data/bids test/data/derivative
 
 ### Explanation
 
-Everything prior to the container (`khanlab_scattr_latest.sif`) are arguments
-to Singluarity / Apptainer, and after are to SCATTR itself. The first three arguments to 
-SCATTR (as with any BIDS App) are the input folder (`test/data/bids`), the 
+Everything prior to the container (`khanlab_labelmerge_latest.sif`) are arguments
+to Singluarity / Apptainer, and after are to Labelmerge itself. The first three arguments to 
+Lablemerge (as with any BIDS App) are the input folder (`test/data/bids`), the 
 output folder (`test/data/derivatives`), and the analysis level (`participant`).
-The `participant` analysis level is used in SCATTR to perform further 
-participant-level processing of Freesurfer (thalamus segmentation), external 
-atlases (combining segmentations) and diffusion derived data (estimation of 
-fibre orientation distributions). This includes estimating an average response 
-function from input data. The `--fs-license` argument allows for specification
-of the location of the required Freesurfer license file if not already 
-specified in the `FS_LICENSE` environment variable. Note, that this is
+The `participant` analysis level is used in Labelmerge to perform further 
+participant-level processing of external atlases (combining segmentations). 
+
+The `--fs-license` argument allows for specification of the location of the required Freesurfer 
+license file if not already specified in the `FS_LICENSE` environment variable. Note, that this is
 required to perform any Freesurfer-related processing. The `--force-output` 
 flag is a Snakemake argument that is invoked to allow for writing of output file
 to already existing folders - in this case, for thalamus segmentations via 
@@ -85,23 +83,16 @@ the rules that will be run. We can also have a shell command used for each rule
 printed to screen using the `-p` Snakemake option
 
 ```
-singularity run -e khanlab_scattr_latest.sif test/data/bids test/data/derivatives participant --fs-license test/fs_license --force-output -np
+singularity run -e khanlab_labelmerge_latest.sif test/data/bids test/data/derivatives participant --fs-license test/fs_license --force-output -np
 ```
 
 Now to actually run the workflow, we need to specify how many cores to use and 
-leave out the dry-run option. The Snakemake `--cores` option tells SCATTR how
+leave out the dry-run option. The Snakemake `--cores` option tells Labelmerge how
 many cores to use. Using `--cores 8` means that SCATTR will only make use of 8 
 cores at most. Generally speaking, you should use `--cores all`, so it can make 
 maximal use of all available CPU cores it has access to on your system. This is 
 especially useful if you are running multiple subjects.
 
-Running the follow command (SCATTR on a single subject) may take up to ~36 hours
-with 8 cores and default parameters, but could be much longer (several days) if 
-you only have a single core.
-
-```
-singularity run -e khanlab_scattr_latest.sif test/data/bids test/data/derivatives participant --fs-license test/fs_license --force-output -p --cores all
-```
 
 _Note that you may need to adjust your 
 [Singularity / Apptainer options](https://sylabs.io/guides/3.1/user-guide/cli/singularity_run.html) 
@@ -116,17 +107,3 @@ export SINGULARITY_BINDPATH=/data:/data
 
 After this completes, you have additional folders in your output folder,
 `test/data/derivatives`, for the one subject.
-
-### Exploring different options
-
-If you alternative want to run SCATTR using a pre-defined average response 
-function, you can use the `--responsemean_dir` flag to specify the location to
-where the average response function is located. 
-
-```
-singularity run khanlab_scattr_latest.sif test/data/bids test/data/derivatives/ participant --responsemean_dir test/data/derivatives/mrtrix/avg --fs-license test/.fs_license -np --force-output
-```
-
-Other parameters exist, which may help to improve processing times at the 
-expense of sensitivity / specifity (e.g. reducing the number of streamlines 
-generated).
