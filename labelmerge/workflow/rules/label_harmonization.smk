@@ -45,11 +45,11 @@ def load_metadata(atlas_path, bids_dir):
 
 def build_metadata_path(wildcards):
     base_metadata = load_metadata(
-        Path(expand(base_inputs["labelmap"].input_path, **wildcards)[0]),
+        Path(expand(base_inputs["labelmap"].path, **wildcards)[0]),
         config["bids_dir"],
     )
     overlay_metadata = load_metadata(
-        Path(expand(overlay_inputs["labelmap"].input_path, **wildcards)[0]),
+        Path(expand(overlay_inputs["labelmap"].path, **wildcards)[0]),
         config["overlay_bids_dir"],
     )
     return {
@@ -61,20 +61,20 @@ def build_metadata_path(wildcards):
 rule merge_labels:
     input:
         unpack(build_metadata_path),
-        base_map=base_inputs["labelmap"].input_path,
-        overlay_map=overlay_inputs["labelmap"].input_path,
+        base_map=base_inputs["labelmap"].path,
+        overlay_map=overlay_inputs["labelmap"].path,
     output:
         merged_map=bids(
             root=str(Path(config["output_dir"]) / "combined"),
             suffix="dseg.nii.gz",
             desc="combined",
-            **base_inputs["labelmap"].input_wildcards,
+            **base_inputs["labelmap"].wildcards,
         ),
         merged_metadata=bids(
             root=str(Path(config["output_dir"]) / "combined"),
             suffix="dseg.tsv",
             desc="combined",
-            **base_inputs["labelmap"].input_wildcards,
+            **base_inputs["labelmap"].wildcards,
         ),
     params:
         base_exceptions=f"--base_exceptions {' '.join(config['base_exceptions'])}"
