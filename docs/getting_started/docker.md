@@ -9,7 +9,7 @@ will assume the default Windows CLI is being used.
 Open your Windows Command Prompt by clicking the `Windows` button and typing
 `cmd` and pressing the `Enter` on your keyboard. This is where you will enter 
 your SCATTR commands. Feel free to make a new directory with `mkdir` or move to
-a directory you would like to work out of with `cd. For this example, we will
+a directory you would like to work out of with `cd'. For this example, we will
 work from:
 
 ```
@@ -25,7 +25,7 @@ datasets). The example below pulls the latest versioned container (replace
 docker pull khanlab/labelmerge:latest
 ```
 
-Run without any arguments to print hte short help:
+Run without any arguments to print the short help:
 
 ```
 docker run -it --rm khanlab/labelmerge:latest
