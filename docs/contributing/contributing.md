@@ -4,10 +4,6 @@ Labelmerge python package dependencies are managed with Poetry (`v1.2.0+`), whic
 you will need installed on your machine. You can find installation instructions 
 on the [Poetry website](https://python-poetry.org/docs/master/#installation).
 
-We **strongly** recommend using Labelmerge with the `--use-singularity` flag, which 
-will pull and use the requiremed containers, unless you are comfortable using
-installing and using all of these tools yourself.
-
 _Note: These instructions are only recommended if you are making changes to the
 Labelmerge codebase and committing these back to the repository, or if you are 
 using Snakemake's cluster execution profiles. If not, it is easier to run 
