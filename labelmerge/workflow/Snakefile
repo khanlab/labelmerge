@@ -38,7 +38,6 @@ base_inputs = generate_inputs(
     derivatives=config["derivatives"],
     pybids_inputs=base_config,
     participant_label=config["participant_label"],
-    use_bids_inputs=True,
 )
 overlay_inputs = generate_inputs(
     bids_dir=config.get("overlay_bids_dir", config["bids_dir"]),
@@ -46,7 +45,6 @@ overlay_inputs = generate_inputs(
     derivatives=config["derivatives"],
     pybids_inputs=overlay_config,
     participant_label=config["participant_label"],
-    use_bids_inputs=True,
 )
 
 
@@ -64,14 +62,10 @@ include: "rules/label_harmonization.smk"
 
 rule all:
     input:
-        expand(
+        base_inputs["labelmap"].expand(
             rules.merge_labels.output["merged_map"],
-            zip,
-            **base_inputs["labelmap"].input_zip_lists
         ),
-        expand(
+        base_inputs["labelmap"].expand(
             rules.merge_labels.output["merged_metadata"],
-            zip,
-            **base_inputs["labelmap"].input_zip_lists
         ),
     default_target: True
