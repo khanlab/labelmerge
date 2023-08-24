@@ -19,7 +19,7 @@ Instructions can be found in the [Docker](https://labelmerge.readthedocs.io/en/s
 * All dependencies are in a single container
 
 ### Cons
-* Typically not possible on shared macines
+* Typically not possible on shared machines
 * Cannot use Snakemake cluster execution profiles
 * Cannot edit code
 
