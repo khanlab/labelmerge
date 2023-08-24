@@ -18,7 +18,7 @@ identify connections terminating within these structures.
 of only those connections within the larger region of interest (e.g. 
 subcortical region around the subcortical structures)
 
-<img src="simple_workflow.png" width="800px">
+<img src="simple_workflow_labelmerge.png" width="800px">
 _(Click on the image to enlarge)_
 
 Snakemake workflows are organized into groups of rules, each
