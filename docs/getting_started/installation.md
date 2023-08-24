@@ -5,9 +5,6 @@ BIDS App for combining multiple atlas parcellations
 ## Requirements
 
 * Docker (Intel Mac/Windows/Linux) or Singularity (Linux)
-* For those wishing to contribute or modify the code, `pip install` or `poetry
-install` are also available (Linux), but will still require Singularity to 
-handle some dependencies. See [Contributing to Labelmerge](https://labelmerge.readthedocs.io/en/stable/contributing/contributing.html).
 * _Note: Apple ARM-based chips (e.g. M1, M2, etc.) are **not currently
 supported**. We do not have a Docker arm64 container yet._
 
