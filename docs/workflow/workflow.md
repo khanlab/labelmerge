@@ -10,13 +10,6 @@ rules. An simplified workflow schematic is also shown below.
 [Labelmerge](https://github.com/khanlab/labelmerge) allows users to combine
 segmentations from varying sources. For example, previously segmented
 thalamic nuclei to be combined with an atlas of other subcortical structures. 
-This newly combined atlas is used for two separate purposes:
-
-1. To individual binarized masks for the structures of interest. This is used to
-identify connections terminating within these structures.
-1. To create a convex hull (including the brainstem) allow for identification
-of only those connections within the larger region of interest (e.g. 
-subcortical region around the subcortical structures)
 
 <img src="simple_workflow_labelmerge.png" width="800px">
 _(Click on the image to enlarge)_
