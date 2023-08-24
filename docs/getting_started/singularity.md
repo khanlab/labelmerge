@@ -6,12 +6,7 @@ the detailed [Apptainer install instructions](https://apptainer.org/docs/admin/m
 1. The following command-line tools are installed:
     * wget
 1. Sufficient disk-space (rough estimate)
-    * in your `/tmp` folder (>30GB) to build the container
-    * in your working folder to store the container (~20GB)
-    * for SCATTR outputs (~40GB per subject using default parameters)
-1. Sufficient CPU and memory - the more you have, the faster it will run and 
-the more streamlines that can be estimated. We recommand at least 8 CPU cores 
-and 64GB memory if using default parameters.
+1. Sufficient CPU and memory - We recommend at least 16GB memory if using default parameters.
 
 ## First time setup
 Pull the container. This can be done from DockerHub, but requires a large 
@@ -58,7 +53,7 @@ singularity run -e khanlab_scattr_latest.sif --help-snakemake
 demonstrate an example of how to run SCATTR:
 
 ```
-singularity run -e khanlab_scattr_latest.sif test/data/bids test/data/derivatives participant --fs-license test/fs_license --force-output -n
+singularity run -e khanlab_labelmerge_latest.sif test/data/bids test/data/derivatives participant
 ```
 
 ### Explanation
@@ -70,25 +65,13 @@ output folder (`test/data/derivatives`), and the analysis level (`participant`).
 The `participant` analysis level is used in Labelmerge to perform further 
 participant-level processing of external atlases (combining segmentations). 
 
-The `--fs-license` argument allows for specification of the location of the required Freesurfer 
-license file if not already specified in the `FS_LICENSE` environment variable. Note, that this is
-required to perform any Freesurfer-related processing. The `--force-output` 
-flag is a Snakemake argument that is invoked to allow for writing of output file
-to already existing folders - in this case, for thalamus segmentations via 
-Freesurfer. We also used the `--dry-run/-n` option to print out what would run,
-without actually running the workflow.
-
-When you run the above command, a long listing will print out, describing all 
-the rules that will be run. We can also have a shell command used for each rule
-printed to screen using the `-p` Snakemake option
-
 ```
 singularity run -e khanlab_labelmerge_latest.sif test/data/bids test/data/derivatives participant --fs-license test/fs_license --force-output -np
 ```
 
 Now to actually run the workflow, we need to specify how many cores to use and 
 leave out the dry-run option. The Snakemake `--cores` option tells Labelmerge how
-many cores to use. Using `--cores 8` means that SCATTR will only make use of 8 
+many cores to use. Using `--cores 8` means that Labelmerge will only make use of 8 
 cores at most. Generally speaking, you should use `--cores all`, so it can make 
 maximal use of all available CPU cores it has access to on your system. This is 
 especially useful if you are running multiple subjects.
