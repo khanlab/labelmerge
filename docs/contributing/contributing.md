@@ -8,9 +8,7 @@ _Note: These instructions are only recommended if you are making changes to the
 Labelmerge codebase and committing these back to the repository, or if you are 
 using Snakemake's cluster execution profiles. If not, it is easier to run 
 Labelmerge using the packaged singularity container (e.g. 
-`docker://khanlab/labelmerge:latest`)._
-
-## Setup the development environment
+`docker://khanlab/labelmerge:v0.4.4`)._
 
 Clone the repository and install all dependencies (including `dev`) with poetry:
 
