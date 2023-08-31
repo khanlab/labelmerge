@@ -36,24 +36,14 @@ singularity run -e khanlab_labelmerge_latest.sif
 Use the `-h` option to get a detailed help listing:
 
 ```
-singularity run -e khanlab_scattr_latest.sif -h
+singularity run -e khanlab_labelmerge_latest.sif -h
 ```
 
-_Note that all the Snakemake command-line options are also available in SCATTR,
+_Note that all the Snakemake command-line options are also available,
 and can be listed with `--help-snakemake`:
 
 ```
-singularity run -e khanlab_scattr_latest.sif --help-snakemake
-```
-
-## Running an example
-
-** Provide test example for labelmerge - We will use the `test` folder found from the 
-[Github repository](https://github.com/khanlab/labelmerge/tree/main/test/) to
-demonstrate an example of how to run SCATTR:
-
-```
-singularity run -e khanlab_labelmerge_latest.sif test/data/bids test/data/derivatives participant
+singularity run -e khanlab_labelmerge_latest.sif --help-snakemake
 ```
 
 ### Explanation
