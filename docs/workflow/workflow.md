@@ -4,7 +4,7 @@ This section describes the Labelmerge workflow (i.e. steps taken to produce
 intermediate and final files). Labelmerge is a 
 [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow, and thus a 
 directed acyclic graph (DAG) that is automatically configured based on a set of 
-rules. An simplified workflow schematic is also shown below.
+rules. A simplified workflow schematic is also shown below.
 
 ## Overall workflow
 [Labelmerge](https://github.com/khanlab/labelmerge) allows users to combine
