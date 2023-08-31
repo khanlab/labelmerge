@@ -30,7 +30,7 @@ Then, you can run labelmerge with:
 poetry run labelmerge
 ```
 
-or you can activate a virtual environment shell and run labelmerge directly:
+or you can activate a virtual environment shell and run Labelmerge directly:
 
 ```
 poetry shell
@@ -41,7 +41,7 @@ You can exit the poetry shell with `exit`
 
 ## Running and fixing code format quality
 
-labelmerge uses [poethepoet](https://github.com/nat-n/poethepoet) as a task runner.
+Labelmerge uses [poethepoet](https://github.com/nat-n/poethepoet) as a task runner.
 You can see what commands are available by running:
 
 ```
