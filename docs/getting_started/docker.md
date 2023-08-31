@@ -8,7 +8,7 @@ will assume the default Windows CLI is being used.
 
 Open your Windows Command Prompt by clicking the `Windows` button and typing
 `cmd` and pressing the `Enter` on your keyboard. This is where you will enter 
-your SCATTR commands. Feel free to make a new directory with `mkdir` or move to
+your commands. Feel free to make a new directory with `mkdir` or move to
 a directory you would like to work out of with `cd'. For this example, we will
 work from:
 
@@ -37,7 +37,7 @@ Use the `-h` option to get a detailed help listing:
 docker run -it --rm khanlab_labelmerge_latest.sif -h
 ```
 
-_Note that all the Snakemake command-line options are also available in SCATTR,
+_Note that all the Snakemake command-line options are also available,
 and can be listed with `--help-snakemake`:
 
 ```
@@ -47,7 +47,7 @@ docker run -it --rm khanlab_labelmerge_latest.sif --help-snakemake
 ### Explanation
 
 Everything prior to the container (`khanlab_labelmerge_latest.sif`) are arguments
-to Docker and after are to Lablemerge itself. The first three arguments to Docker
+to Docker and after are to Labelmerge itself. The first three arguments to Docker
 are to enable interactive mode (`-it`), run and subsequently remove the Docker
 container upon completion (`--rm`) and mount the the directoty 
 (`-v c:\Users\username\Downloads\labelmerge\test`) to a directory within the
@@ -61,7 +61,7 @@ analysis level (`participant`).
 
 
 ```
-docker run -it --rm -v c:\Users\username\Downloads\scattr\test:\test  khanlab_scattr_latest.sif /test/data/bids /test/data/derivatives participant --fs-license /test/fs_license --force-output -np
+docker run -it --rm -v c:\Users\username\Downloads\labelmerge\test:\test  khanlab_labelmerge_latest.sif /test/data/bids /test/data/derivatives participant -np
 ```
 
 Now to actually run the workflow, we need to specify how many cores to use and 
