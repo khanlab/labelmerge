@@ -2,7 +2,6 @@
 name-template: $RESOLVED_VERSION
 tag-template: v$RESOLVED_VERSION
 filter-by-commitish: true
-
 template: |
   ## Changes
   $CHANGES
@@ -15,12 +14,9 @@ categories:
     labels: [maintenance, test]
   - title: 📝 Documentation
     labels: [documentation]
-
 exclude-labels: [skip_changelog]
-
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: \<*_&    # You can add  # and @ to disable mentions, and add ` to disable code blocks.
-
 version-resolver:
   # major:
   #   labels:
