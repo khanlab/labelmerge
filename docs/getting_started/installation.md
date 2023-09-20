@@ -46,4 +46,10 @@ Instructions can be found in the [Contributing](https://labelmerge.readthedocs.i
 ### Cons
 * Only compatible on systems with Singularity for external dependencies
 
+## Pip Install
+`labelmerge` can also be installed using pip:
+
+```bash
+pip install labelmerge
+```
 
