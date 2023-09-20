@@ -21,10 +21,8 @@ also exist in separate rule files, which can be found under the
 in the workflow source. 
 
 At a more granular level, Labelmerge reads one “base” and one “overlay” atlas image organized as BIDS 
-derivatives, with the label names supplied as metadata in separate TSV files. 
-An image mask is created for both the base and overlay images, mapping each unique 
-label name in the parcellation scheme to their respective voxel coordinates. The two masks 
-are then merged, with labels reindexed to range from one to the total number of labels across both images. 
-An output image is constructed where any voxel that is labeled in both the base and overlay images takes 
-the reindexed value from the overlay image. Finally, this image is written alongside a new metadata table 
-where the label names are pre-appended with “base “ or “overlay “ as appropriate. 
+derivatives, with the label names supplied as metadata in separate TSV files. Brain Masks are data dictionaries, 
+mapping each label to the associated spatial region. The merge labels step is achieved by updating the 
+empty mask in order of the overlay, exceptions, and base masks, overwriting any duplicate labels.  
+Finally, this image is written alongside a new metadata table where the label names are prepended with 
+“base “ or “overlay “ as appropriate. 
