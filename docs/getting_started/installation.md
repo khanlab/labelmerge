@@ -7,7 +7,7 @@ BIDS App for combining multiple atlas parcellations
 * Docker (Intel Mac/Windows/Linux) or Singularity (Linux)
 
 ### Notes
-* Inputs to Labelmerge should be organized as BIDS derivatives, taking one "base" and one "overlay" atlas
+* Inputs to Labelmerge should be organized as [BIDS derivatives](https://bids-specification.readthedocs.io/en/stable/01-introduction.html), taking one "base" and one "overlay" atlas
 
 ## Docker on Windows / Mac (Intel) / Linux
 
