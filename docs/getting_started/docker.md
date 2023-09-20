@@ -49,7 +49,7 @@ docker run -it --rm khanlab_labelmerge_latest.sif --help-snakemake
 Everything prior to the container (`khanlab_labelmerge_latest.sif`) are arguments
 to Docker and after are to Labelmerge itself. The first three arguments to Docker
 are to enable interactive mode (`-it`), run and subsequently remove the Docker
-container upon completion (`--rm`) and mount the the directoty 
+container upon completion (`--rm`) and mount the the directory 
 (`-v c:\Users\username\Downloads\labelmerge\test`) to a directory within the
 container named `\test`. These are not specific to Labelmerge, but are general ways
 to use Docker. You may want to familiarize yourself with 
