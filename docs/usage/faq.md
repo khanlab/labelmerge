@@ -10,7 +10,7 @@ ensure your
 [Singularity options](https://docs.sylabs.io/guides/3.1/user-guide/cli/singularity_run.html) 
 are appropriate, in particular `SINGULARITY_BINDPATH`. For Docker, ensure you 
 are mounting the correct directory with the `-v` flag described in the 
-[Getting Started](https://scattr.readthedocs.io/en/stable/getting_started/docker.html)
+[Getting Started](https://labelmerge.readthedocs.io/en/stable/getting_started/docker.html)
 section.
 * Labelmerge does not recognize your BIDS-formatted input images. This can occur if,
 for example, T1w images are labelled with the suffix `t1w.nii.gz` instead of 
