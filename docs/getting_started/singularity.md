@@ -56,7 +56,7 @@ The `participant` analysis level is used in Labelmerge to perform further
 participant-level processing of external atlases (combining segmentations). 
 
 ```
-singularity run -e khanlab_labelmerge_latest.sif test/data/bids test/data/derivatives participant --fs-license test/fs_license --force-output -np
+singularity run -e khanlab_labelmerge_latest.sif test/data/bids test/data/derivatives participant -np
 ```
 
 Now to actually run the workflow, we need to specify how many cores to use and 
