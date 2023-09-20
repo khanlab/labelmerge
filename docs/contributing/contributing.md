@@ -7,7 +7,7 @@ on the [Poetry website](https://python-poetry.org/docs/master/#installation).
 _Note: These instructions are only recommended if you are making changes to the
 Labelmerge codebase and committing these back to the repository, or if you are 
 using Snakemake's cluster execution profiles. If not, it is easier to run 
-Labelmerge using the packaged singularity container (e.g. 
+Labelmerge using the packaged container (e.g. 
 `docker://khanlab/labelmerge:v0.4.4`)._
 
 Clone the repository and install all dependencies (including `dev`) with poetry:
@@ -22,7 +22,7 @@ Poetry will automatically create a virtual environment. To customize where
 these virtual environments are stored, see the poetry docs 
 [here](https://python-poetry.org/docs/configuration/)
 
-Then, you can run labelmerge with:
+Then, you can run Labelmerge with:
 
 ```
 poetry run labelmerge
