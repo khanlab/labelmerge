@@ -14,6 +14,8 @@ thalamic nuclei to be combined with an atlas of other subcortical structures.
 <img src="simple_workflow_labelmerge.png" width="800px">
 _(Click on the image to enlarge)_
 
+<img src="labelmerge_output.png" width="800px">
+
 Snakemake workflows are organized into groups of rules, each
 representing the different phases of the workflow. Each grouped set of rules 
 also exist in separate rule files, which can be found under the 
