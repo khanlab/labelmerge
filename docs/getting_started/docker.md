@@ -17,7 +17,7 @@ cd c:\Users\username\Downloads
 ```
 
 Pull the container (this will take some time and storage stage, but like an 
-installation, it only needs to be done once and can be then be run on many 
+installation, it only needs to be done once and can then be run on many 
 datasets). The example below pulls the latest versioned container (replace 
 `latest` with `vX.X.X` for a specific version).
 
@@ -37,7 +37,7 @@ Use the `-h` option to get a detailed help listing:
 docker run -it --rm khanlab_labelmerge_latest.sif -h
 ```
 
-_Note that all the Snakemake command-line options are also available,
+*Note that all the Snakemake command-line options are also available,
 and can be listed with `--help-snakemake`:
 
 ```
