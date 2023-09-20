@@ -50,7 +50,7 @@ singularity run -e khanlab_labelmerge_latest.sif --help-snakemake
 
 Everything prior to the container (`khanlab_labelmerge_latest.sif`) are arguments
 to Singluarity / Apptainer, and after are to Labelmerge itself. The first three arguments to 
-Lablemerge (as with any BIDS App) are the input folder (`test/data/bids`), the 
+Labelmerge (as with any BIDS App) are the input folder (`test/data/bids`), the 
 output folder (`test/data/derivatives`), and the analysis level (`participant`).
 The `participant` analysis level is used in Labelmerge to perform further 
 participant-level processing of external atlases (combining segmentations). 
