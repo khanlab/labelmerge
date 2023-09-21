@@ -24,9 +24,9 @@ also exist in separate rule files, which can be found under the
 in the workflow source. 
 
 At a more granular level, Labelmerge reads one “base” and one “overlay” atlas image organized as [BIDS 
-derivatives](https://bids-specification.readthedocs.io/en/stable/01-introduction.html),
+derivatives](https://bids-specification.readthedocs.io/en/stable/05-derivatives/03-imaging.html#segmentations),
 with the label names supplied as metadata in separate TSV files. Brain masks are data dictionaries, 
-mapping each atlas label to the associated spatial region.  The merge labels step is achieved by updating an empty "merged" mask 
+mapping each atlas label to the associated spatial region.  The merge labels step is then achieved by updating an empty "merged" mask 
 in order of the base and overlay atlases, overwritting any duplicate labels.  Users also have additional flexibility to tag specific 
 labels to be dropped or included as exceptions within the created merged mask. Finally, a new image is written alongside a metadata table 
 where the label names are prepended with “base “ or “overlay “ as appropriate. 
