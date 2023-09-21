@@ -7,7 +7,7 @@ BIDS App for combining multiple atlas parcellations
 * Docker (Intel Mac/Windows/Linux) or Singularity (Linux)
 
 ### Notes
-* Inputs to Labelmerge should be organized as [BIDS derivatives](https://bids-specification.readthedocs.io/en/stable/01-introduction.html), taking one "base" and one "overlay" atlas
+* Inputs to Labelmerge should be organized as [BIDS derivatives](https://bids-specification.readthedocs.io/en/stable/05-derivatives/03-imaging.html#segmentations), taking one "base" and one "overlay" atlas
 
 ## Docker on Windows / Mac (Intel) / Linux
 
@@ -53,3 +53,9 @@ Instructions can be found in the [Contributing](https://labelmerge.readthedocs.i
 pip install labelmerge
 ```
 
+### Pros
+* Ease of installation
+
+### Cons
+* Labelmerge can fail with other applications that might require different versions of python
+* Limited flexibility to modify code 
