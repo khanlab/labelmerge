@@ -46,7 +46,7 @@ You can see what commands are available by running:
 poetry run poe 
 ```
 
-We use a a few tools, including `black`, `flake8`, `isort`, `snakefmt`, and 
+We use a a few tools, including `black`, `ruff`, `isort`, `snakefmt`, and 
 `yamlfix` to ensure formatting and style of our codebase is consistent. There 
 are two task runners you can use to check and fix your code, which can be 
 invoked with:
