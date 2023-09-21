@@ -57,5 +57,4 @@ pip install labelmerge
 * Ease of installation
 
 ### Cons
-* Labelmerge can fail with other applications that might require different versions of python
-* Limited flexibility to modify code 
+* Potential for conflicting dependencies across different packages
