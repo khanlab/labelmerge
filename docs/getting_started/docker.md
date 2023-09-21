@@ -2,7 +2,7 @@
 
 **Note, these instructions assume you have Docker already installed on a Windows system.
 Docker can also be run on Linux or MacOS with similar commands, but here, we 
-will assume the default Windows CLI is being used.
+will assume the default Windows CLI is being used.**
 
 ## First time setup
 
@@ -38,7 +38,7 @@ docker run -it --rm khanlab_labelmerge_latest.sif -h
 ```
 
 *Note that all the Snakemake command-line options are also available,
-and can be listed with `--help-snakemake`:
+and can be listed with `--help-snakemake`:*
 
 ```
 docker run -it --rm khanlab_labelmerge_latest.sif --help-snakemake
@@ -73,6 +73,4 @@ especially useful if you are running multiple subjects.
 
 After this completes, you have additional folders in your output folder,
 `c:\Users\username\Downloads\labelmerge\test\data\derivatives`, for the one subject.
-
-### Exploring different options
 
