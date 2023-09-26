@@ -7,6 +7,8 @@ These are all the required and optional arguments Labelmerge accepts in order to
 run flexibly on many different input data types and with many options. In most 
 cases, the `--overlay_bids dir` or `--base_desc` and `--overlay_desc` arguments are required.
 
+***Note:*** inputs to Labelmerge should be organized as [BIDS derivatives](https://bids-specification.readthedocs.io/en/stable/05-derivatives/03-imaging.html#segmentations)
+
 ```{argparse}
 ---
 filename: ../labelmerge/run.py
