@@ -8,6 +8,7 @@ from snakebids.app import SnakeBidsApp
 def get_parser():
     """Exposes parser for sphinx doc generation, cwd is the docs dir"""
     app = SnakeBidsApp("../labelmerge", skip_parse_args=True)
+    add_dynamic_args(app.parser, app.config["parse_args"], app.config["pybids_inputs"])
     return app.parser
 
 
