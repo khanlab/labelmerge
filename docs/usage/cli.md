@@ -5,7 +5,7 @@ The following can also be seen by entering `labelmerge -h` into your terminal.
 
 These are all the required and optional arguments Labelmerge accepts in order to 
 run flexibly on many different input data types and with many options. In most 
-cases, only the required arguments are needed.
+cases, the `--overlay_bids dir` or `--base_desc` and `--overlay_desc` arguments are required.
 
 ```{argparse}
 ---
