@@ -6,7 +6,7 @@ the detailed [Apptainer install instructions](https://apptainer.org/docs/admin/m
 1. The following command-line tools are installed:
     * wget
 1. Sufficient disk-space (rough estimate)
-1. Sufficient CPU and memory - We recommend at least 16GB memory if using default parameters.
+1. Sufficient CPU and memory - We recommend at least 4GB memory if using default parameters.
 
 ## First time setup
 Pull the container. This can be done from DockerHub, but requires a large 
