@@ -1,7 +1,5 @@
 # Installation
 
-BIDS App for combining multiple atlas parcellations
-
 ## Requirements
 
 * Docker (Intel Mac/Windows/Linux) or Singularity (Linux)
