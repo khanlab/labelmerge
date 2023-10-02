@@ -3,7 +3,7 @@
 import os
 
 from snakebids.app import SnakeBidsApp
-from snakebids.cli import add_dynamic_arg
+from snakebids.cli import add_dynamic_args
 
 
 def get_parser():
