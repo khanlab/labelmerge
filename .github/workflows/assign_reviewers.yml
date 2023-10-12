@@ -1,17 +1,8 @@
 ---
 name: Assign reviewer
-
 on:
   pull_request_target:
     types: [opened, ready_for_review]
-
 jobs:
-  assign:
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.assignee == null
-
-    steps:
-      - name: Assign reviewer
-        uses: kentaro-m/auto-assign-action@v1.2.5
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+  assign-reviewer:
+    uses: khanlab/actions/.github/workflows/workflow-pr_task-assignReviewer.yml@v0.2.1

@@ -17,14 +17,13 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
+python = ">=3.8,<3.12"
 snakebids = "^0.9.0"
 nibabel = "^3.2.2"
 numpy = "^1.22.3"
 xarray = "^2022.11.0"
 
 [tool.poetry.group.dev.dependencies]
-flake8 = "4.0"
 pytest-console-scripts = "1.2"
 pytest = "^7.0.1"
 black = "^22.1.0"
@@ -35,6 +34,7 @@ pre-commit = "^2.17.0"
 snakefmt = "^0.6.1"
 yamlfix = "^1.1.0"
 mypy = "^0.991"
+ruff = "^0.0.290"
 
 [tool.poetry.scripts]
 labelmerge = 'labelmerge.run:main'
@@ -51,15 +51,16 @@ isort = "isort labelmerge"
 isort-check = "isort -c labelmerge"
 black = "black labelmerge"
 black-check = "black --check labelmerge"
-flake8 = "flake8 labelmerge"
+ruff = "ruff --fix labelmerge"
+ruff-check = "ruff labelmerge"
 snakefmt = "snakefmt labelmerge"
 snakefmt-check = "snakefmt --check labelmerge"
-quality = ["yamlfix", "isort", "black", "flake8", "snakefmt"]
+quality = ["yamlfix", "ruff", "isort", "black", "snakefmt"]
 quality-check = [
     "yamlfix-check",
+    "ruff-check",
     "isort-check",
     "black-check",
-    "flake8",
     "snakefmt-check",
 ]
 
@@ -73,3 +74,7 @@ line-length = 79
 [tool.snakefmt]
 line_length = 79
 include = '\.smk$|^Snakefile'
+
+[tool.ruff]
+line-length = 79
+builtins = [ "snakemake" ]
