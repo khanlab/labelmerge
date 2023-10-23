@@ -6,12 +6,12 @@ on:
     tags: [v*]
 jobs:
   deploy-docker:
-    uses: khanlab/actions/.github/workflows/workflow-release_task-deployDocker.yml@v0.2.1
+    uses: khanlab/actions/.github/workflows/workflow-release_task-deployDocker.yml@v0.3.0
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   deploy-pypi:
-    uses: khanlab/actions/.github/workflows/workflow-release_task-deployPypi.yml@v0.2.1
+    uses: khanlab/actions/.github/workflows/workflow-release_task-deployPypi.yml@v0.3.0
     secrets:
       PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
