@@ -20,6 +20,8 @@ snakebids = "^0.10.2"
 nibabel = "^3.2.2"
 numpy = "^1.22.3"
 xarray = "^2022.11.0"
+# Newer versions of pulp incompatible with snakebids
+pulp = "<2.8.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest-console-scripts = "1.2"
