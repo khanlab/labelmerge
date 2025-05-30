@@ -91,6 +91,8 @@ rule merge_labels:
         else "",
     resources:
         script=str(Path(workflow.basedir) / "scripts" / "labelmerge.py"),
+    conda:
+        "../envs/merge_labels.yaml"
     shell:
         "python3 {resources.script} {input.base_map} {input.base_metadata} "
         "{input.overlay_map} {input.overlay_metadata} "
