@@ -17,6 +17,7 @@ packages = [{ include = "labelmerge" }]
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 snakebids = "^0.14.0"
+appdirs = "^1.4.4"
 pulp = { version="<2.8.0", python = "<3.11" }
 
 [tool.poetry.group.dev.dependencies]
