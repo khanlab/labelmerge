@@ -1,12 +1,13 @@
 # Running Labelmerge with Singularity
 
 ## Pre-requisites
-1. Singularity / Apptainer is is installed on your system. For more info, see
-the detailed [Apptainer install instructions](https://apptainer.org/docs/admin/main/installation.html#install-from-pre-built-packages).
-1. The following command-line tools are installed:
-    * wget
-1. Sufficient disk-space (rough estimate)
-1. Sufficient CPU and memory - We recommend at least 4GB memory if using default parameters.
+1. Apptainer (or Singularity) is installed on your system. For more info, see the detailed [apptainer install instructions](https://apptainer.org/docs/admin/main/installation.html#install-from-pre-built-packages).
+ 2. The following command-line tools are installed:
+      - wget
+      - tar
+ 3. Sufficient disk-space is needed
+ 4. Sufficient CPU and memory - the more you have, the faster it will run, but we recommend at least 4 CPU cores and 16GB memory.
+
 
 ## First time setup
 Pull the container. This can be done from DockerHub, but requires a large 
@@ -15,37 +16,37 @@ Docker container to a Singularity/Apptainer container. The example below pulls
 the latest versioned container (replace `latest` with `vX.X.X` for a specific
 version).
 
+Pull the container:
 ```
-singularity pull docker://khanlab/labelmerge:latest
+apptainer pull khanlab_labelmerge_latest.sif docker://khanlab/labelmerge:latest
 ```
-_Note: If you encounter any errors pulling the container from DockerHub, it may
-be because you are running out of disk space in your cache folders. You can 
-change these locations by setting environment variables, however, using a 
-network file system for the folders may result in poor performance:_
-```
-export SINGULARITY_CACHEDIR=/YOURDIR/.cache/singularity
-```
-
 
 Run Labelmerge without any arguments to print the short help:
 
 ```
-singularity run -e khanlab_labelmerge_latest.sif
+apptainer run -e khanlab_labelmerge_latest.sif
 ```
 
 Use the `-h` option to get a detailed help listing:
 
 ```
-singularity run -e khanlab_labelmerge_latest.sif -h
+apptainer run -e khanlab_labelmerge_latest.sif -h
 ```
 
 _Note that all the Snakemake command-line options are also available,
 and can be listed with `--help-snakemake`:
 
 ```
-singularity run -e khanlab_labelmerge_latest.sif --help-snakemake
+apptainer run -e khanlab_labelmerge_latest.sif --help-snakemake
 ```
 
+Note: If you encounter any errors pulling the container from dockerhub, it may be because you are running 
+out of disk space in your cache folders. Note, you can change these locations 
+by setting environment variables, however, using a network file system for the folders may result in poor performance and/or errors e.g.:
+    
+```
+export APPTAINER_CACHEDIR=/YOURDIR/.cache/apptainer
+```
 ### Explanation
 
 Everything prior to the container (`khanlab_labelmerge_latest.sif`) are arguments
@@ -66,16 +67,11 @@ cores at most. Generally speaking, you should use `--cores all`, so it can make
 maximal use of all available CPU cores it has access to on your system. This is 
 especially useful if you are running multiple subjects.
 
-
-_Note that you may need to adjust your 
-[Singularity / Apptainer options](https://sylabs.io/guides/3.1/user-guide/cli/singularity_run.html) 
-to ensure the container can read and write to your input and output directories, 
-respectively. You can bind paths easily by setting an environment variable, 
-e.g. if you have a `/project` folder that contains your data, you can add it to
-the `SINGULARITY_BINDPATH` so it is available when you are running a container:_
+Note that you may need to adjust your [Singularity options](https://sylabs.io/guides/3.1/user-guide/cli/apptainer_run.html) to ensure the container can read and write to yout input and output directories, respectively. You can bind paths easily by setting an 
+environment variable, e.g. if you have a `/project` folder that contains your data, you can add it to the `APPTAINER_BINDPATH` so it is available when you are running a container:
 
 ```
-export SINGULARITY_BINDPATH=/data:/data
+    export APPTAINER_BINDPATH=/data:/data
 ```
 
 After this completes, you have additional folders in your output folder,

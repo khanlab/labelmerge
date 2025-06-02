@@ -21,6 +21,8 @@ prog: labelmerge
 In addition to the above command line arguments, Snakemake arguments can also be
 passed at the Labelmerge command line.
 
+The most critical of these is the `--cores / -c` and `--force-output` arguments,
+which are **required** arguments for labelmerge.
 
 The complete list of [Snakemake](https://snakemake.readthedocs.io/en/stable/) 
 arguments are below, and most act to determine your environment and app
