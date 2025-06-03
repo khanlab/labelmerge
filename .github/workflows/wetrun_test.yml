@@ -35,5 +35,5 @@ jobs:
         run: |
           conda activate snakebids-env
           ./labelmerge/run.py test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym test_out participant \
-            --base-desc 100Parcels7Networks --overlay_bids_dir /localscratch/tpl-MNI152NLin2009cAsym/ \
+            --base-desc 100Parcels7Networks --overlay_bids_dir test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym \
             --overlay_desc tn --cores all --force-output --conda-frontend mamba | tee labelmerge_output.log
