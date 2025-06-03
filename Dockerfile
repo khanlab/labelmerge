@@ -1,21 +1,28 @@
-# Stage: build
-FROM python:3.9-slim-bullseye AS build
-COPY . /opt/labelmerge/
-RUN cd /opt/labelmerge \
-    && pip install --prefer-binary --no-cache-dir poetry \  
-    && poetry build -f wheel
+FROM condaforge/miniforge3:latest
 
-# Stage: runtime
-# NOTE: g++ required to install wheel (snakebids)
-FROM python:3.9-slim-bullseye AS runtime
-COPY --from=build /opt/labelmerge/dist/*.whl /opt/labelmerge/
-RUN apt-get update -qq \
-    && apt-get install -y -q --no-install-recommends \
-    g++=4:10.2.1-1 \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && WHEEL=`ls /opt/labelmerge | grep whl` \
-    && pip install /opt/labelmerge/$WHEEL \
-    && rm -r /opt/labelmerge \
-    && apt-get purge -y -q g++ \
-    && apt-get --purge -y -qq autoremove
-ENTRYPOINT ["labelmerge"]
+WORKDIR /src/
+
+# Copy your code
+COPY . /src/
+
+# Disable user site packages
+ENV PYTHONNOUSERSITE=1
+
+# Use bash for the following RUNs
+SHELL ["/bin/bash", "-c"]
+
+# ---- ONE SINGLE RUN ----
+RUN set -e && \
+    conda install -n base -c conda-forge mamba -y && \
+    mamba create -y -n snakebids-env -c conda-forge -c bioconda snakebids unzip && \
+    source /opt/conda/etc/profile.d/conda.sh && \
+    conda activate snakebids-env && \
+    ./labelmerge/run.py test/data/bids_base/ derivatives participant --base_desc 4 --overlay_bids_dir test/data/bids_overlay/ --overlay_desc 6  -np --use-conda --conda-create-envs-only --conda-prefix /src/conda-envs && \
+    conda clean --all -y && \
+    rm -rf /opt/conda/pkgs /root/.caches
+
+# Set snakemake profile
+ENV SNAKEMAKE_PROFILE=/src/labelmerge/workflow/profiles/docker-conda
+
+# Set entrypoint
+ENTRYPOINT ["/src/entrypoint.sh"]
