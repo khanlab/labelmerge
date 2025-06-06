@@ -55,31 +55,30 @@ You can try Labelmerge on a sample dataset to make sure everything works as expe
 First, download and extract a single-subject BIDS dataset for this test:
 
 ```bash
-wget "https://www.dropbox.com/scl/fo/qzsym6f7k56yc8jcseawu/AOiV4AhmH6oiTO0Cr4GoaW8?rlkey=wftu1ph2cbdlysocqvbn1muka&st=xw5x84bp&dl=0" -O labelmerge_test.tar
-tar -xvf labelmerge_test.tar
+wget "https://www.dropbox.com/scl/fo/qzsym6f7k56yc8jcseawu/AOiV4AhmH6oiTO0Cr4GoaW8?rlkey=wftu1ph2cbdlysocqvbn1muka&st=xw5x84bp&dl=0" -O labelmerge_test.zip
+unzip labelmerge_test.zip
 ```
 
-This cwill create a `/labelmerge_test` folder with data from the **MNI152NLin2009cAsym_atlas**, containing cortical and subcortical volumes to merge.
+This comand will create a `/tpl-MNI152NLin2009cAsym` folder with data from the **MNI152NLin2009cAsym_atlas**, containing cortical and subcortical volumes to merge.
 
 ```
-labelmerge-test
-    └── tpl-MNI152NLin2009cAsym
-        └── anat
-            ├── tpl-MNI152NLin2009cAsym_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.tsv
-            ├── tpl-MNI152NLin2009cAsym_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.tsv
-            ├── tpl-MNI152NLin2009cAsym_res-01_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.nii.gz
-            └──  tpl-MNI152NLin2009cAsym_res-01_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.nii.gz
+tpl-MNI152NLin2009cAsym
+    └── anat
+           ├── tpl-MNI152NLin2009cAsym_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.tsv
+           ├── tpl-MNI152NLin2009cAsym_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.tsv
+           ├── tpl-MNI152NLin2009cAsym_res-01_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.nii.gz
+           └──  tpl-MNI152NLin2009cAsym_res-01_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.nii.gz
 
 3 directories, 4 files
 ```
 
 Now let's run labelmerge. 
 
-    apptainer run -e khanlab_labelmerge_latest.sif  labelmerge_test output_dir participant --base-desc 100Parcels7Networks --overlay_bids_dir  labelmerge_test --overlay_desc tn -n
+    apptainer run -e khanlab_labelmerge_latest.sif tpl-MNI152NLin2009cAsym/ output_dir participant --base-desc 100Parcels7Networks --overlay_bids_dir  tpl-MNI152NLin2009cAsym/ --overlay_desc tn -n
 
 ### Explanation
 Everything prior to the container (`khanlab_labelmerge_latest.sif`) are arguments to apptainer, and after are to labelmerge itself. The first three arguments to labelmerge (as with any BIDS App) are the input
-folder (`labelmerge_test`), the output folder (`output_dir`), and then the analysis level (`participant`). The `participant` analysis 
+folder (`/tpl-MNI152NLin2009cAsym`), the output folder (`output_dir`), and then the analysis level (`participant`). The `participant` analysis 
 level is used in labelmerge for performing any
 participant-level processing. We also used the `--dry-run/-n`  option to 
 just print out what would run, without actually running anything.

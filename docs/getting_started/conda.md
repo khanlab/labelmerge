@@ -46,20 +46,19 @@ You can try Labelmerge on a sample dataset to make sure everything works as expe
 First, download and extract a single-subject BIDS dataset for this test:
 
 ```bash
-wget "https://www.dropbox.com/scl/fo/qzsym6f7k56yc8jcseawu/AOiV4AhmH6oiTO0Cr4GoaW8?rlkey=wftu1ph2cbdlysocqvbn1muka&st=xw5x84bp&dl=0" -O labelmerge_test.tar
-tar -xvf labelmerge_test.tar
+wget "https://www.dropbox.com/scl/fo/qzsym6f7k56yc8jcseawu/AOiV4AhmH6oiTO0Cr4GoaW8?rlkey=wftu1ph2cbdlysocqvbn1muka&st=xw5x84bp&dl=0" -O labelmerge_test.zip
+unzip labelmerge_test.zip
 ```
 
-This cwill create a `/labelmerge_test` folder with data from the **MNI152NLin2009cAsym_atlas**, containing cortical and subcortical volumes to merge.
+This comand will create a `/tpl-MNI152NLin2009cAsym` folder with data from the **MNI152NLin2009cAsym_atlas**, containing cortical and subcortical volumes to merge.
 
 ```
-labelmerge-test
-    └── tpl-MNI152NLin2009cAsym
-        └── anat
-            ├── tpl-MNI152NLin2009cAsym_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.tsv
-            ├── tpl-MNI152NLin2009cAsym_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.tsv
-            ├── tpl-MNI152NLin2009cAsym_res-01_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.nii.gz
-            └──  tpl-MNI152NLin2009cAsym_res-01_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.nii.gz
+tpl-MNI152NLin2009cAsym
+  └── anat
+       ├── tpl-MNI152NLin2009cAsym_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.tsv
+       ├── tpl-MNI152NLin2009cAsym_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.tsv
+       ├── tpl-MNI152NLin2009cAsym_res-01_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.nii.gz
+       └──  tpl-MNI152NLin2009cAsym_res-01_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.nii.gz
 
 3 directories, 4 files
 ```
@@ -69,7 +68,7 @@ labelmerge-test
 By default (Linux or Intel-based macOS), you can run:
 
 ```bash
-labelmerge labelmerge_test output_dir participant --base-desc 100Parcels7Networks --overlay_bids_dir  labelmerge_test --overlay_desc tn --cores all
+labelmerge tpl-MNI152NLin2009cAsym/ output_dir participant --cores all --base-desc 100Parcels7Networks --overlay_bids_dir  tpl-MNI152NLin2009cAsym --overlay_desc tn
 ```
 
 This should run the full pipeline and place results in a new `output_dir/` folder.
@@ -77,7 +76,7 @@ This should run the full pipeline and place results in a new `output_dir/` folde
 If you’re on an M-chip mac, prefix with CONDA_SUBDIR=osx-64 to ensure compatibility:
 
 ```bash
-CONDA_SUBDIR=osx-64 labelmerge labelmerge_test output_dir participant --base-desc 100Parcels7Networks --overlay_bids_dir  labelmerge_test --overlay_desc tn --cores all
+CONDA_SUBDIR=osx-64 labelmerge tpl-MNI152NLin2009cAsym/ output_dir participant --cores all --base-desc 100Parcels7Networks --overlay_bids_dir  tpl-MNI152NLin2009cAsym --overlay_desc tn
 ```
 
 ## Cache Directory

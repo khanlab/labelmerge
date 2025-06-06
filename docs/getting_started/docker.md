@@ -46,29 +46,29 @@ docker run -it --rm khanlab_labelmerge_latest.sif --help-snakemake
 
 ## Running an example
 
-Download and extract a BIDS dataset for this test from [labelmerge_test.tar]("https://www.dropbox.com/scl/fo/qzsym6f7k56yc8jcseawu/AOiV4AhmH6oiTO0Cr4GoaW8?rlkey=wftu1ph2cbdlysocqvbn1muka&st=xw5x84bp&dl=0"). Here we will also assume you chose to save and extract to the directory `c:\Users\msnyder\Downloads\`.
+Download and extract the tpl-MNI152NLin2009cAsym BIDS dataset for this test from [labelmerge_test]("https://www.dropbox.com/scl/fo/qzsym6f7k56yc8jcseawu/AOiV4AhmH6oiTO0Cr4GoaW8?rlkey=wftu1ph2cbdlysocqvbn1muka&st=xw5x84bp&dl=0"). Here we will also assume you chose to save and extract to the directory `c:\Users\msnyder\Downloads\`.
 
 This contains a `/labelmerge_test` directory with data from the **MNI152NLin2009cAsym_atlas**, containing cortical and subcortical volumes to merge.
 
 ```
-labelmerge-test
-    └── tpl-MNI152NLin2009cAsym
-        └── anat
-            ├── tpl-MNI152NLin2009cAsym_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.tsv
-            ├── tpl-MNI152NLin2009cAsym_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.tsv
-            ├── tpl-MNI152NLin2009cAsym_res-01_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.nii.gz
-            └──  tpl-MNI152NLin2009cAsym_res-01_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.nii.gz
+
+tpl-MNI152NLin2009cAsym
+    └── anat
+           ├── tpl-MNI152NLin2009cAsym_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.tsv
+           ├── tpl-MNI152NLin2009cAsym_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.tsv
+           ├── tpl-MNI152NLin2009cAsym_res-01_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.nii.gz
+           └──  tpl-MNI152NLin2009cAsym_res-01_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.nii.gz
 
 3 directories, 4 files
 ```
 
 Now let's run labelmerge on the test dataset. Docker will need read/write access to the input and output directories, respectively. This is achieved with the `-v` flag. This 'binds' or 'mounts' a directory to a new directory inside the container.
 
-    docker run -it --rm -v c:\Users\msnyder\Downloads\labelmerge_test:/bids -v c:\Users\msnyder\Downloads\labelmerge_test_output:/output khanlab/labelmerge:latest /bids /output participant --base-desc 100Parcels7Networks --overlay_bids_dir /bids --overlay_desc tn -n
+    docker run -it --rm -v c:\Users\msnyder\Downloads\tpl-MNI152NLin2009cAsym:/bids -v c:\Users\msnyder\Downloads\labelmerge_test_output:/output khanlab/labelmerge:latest /bids /output participant --base-desc 100Parcels7Networks --overlay_bids_dir /bids --overlay_desc tn -n
 
 ### Explanation
 
--v c:\Users\msnyder\Downloads\labelmerge_test:/bids` tells Docker to mount the directory `c:\Users\msnyder\Downloads\labelmerge_test` into a new directory inside the container named `/bids`. We then do the same things for our output directory named `labelmerge_test_output`, which we mount to `/output` inside the container. These arguments are not specific to labelmerge but rather are general ways to use Docker. You may want to familiarize yourself with [Docker options](https://docs.docker.com/engine/reference/run/).
+-v c:\Users\msnyder\Downloads\tpl-MNI152NLin2009cAsym:/bids` tells Docker to mount the directory `c:\Users\msnyder\Downloads\labelmerge_test` into a new directory inside the container named `/bids`. We then do the same things for our output directory named `labelmerge_test_output`, which we mount to `/output` inside the container. These arguments are not specific to labelmerge but rather are general ways to use Docker. You may want to familiarize yourself with [Docker options](https://docs.docker.com/engine/reference/run/).
 
 Everything after we specified the container (`khanlab/labelmerge:latest`) are arguments to AutoAFIDs itself. The first of these arguments (as with any BIDS App) are the input directory (`/bids`), the output directory (`/output`), and then the analysis level (`participant`). The `participant` analysis 
 level is used in labelmerge for performing any participant-level processing. We then need to specify the description on the base image and tsv for labelmerge with `--base-desc`, the overlay nifti bids directory with `--overlay_bids_dir` and the overlay image and tsv description with `--overlay-desc`. We also used the `--dry-run/-n`  option to just print out what would run, without actually running anything.
@@ -80,7 +80,7 @@ the dry-run option.  The Snakemake `--cores` option tells labelmerge how many co
 you should use `--cores all`,  so it can make maximal use of all the CPU cores it has access to on your system. This is especially 
 useful if you are running multiple subjects. 
 
-    docker run -it --rm -v c:\Users\msnyder\Downloads\labelmerge_test:/bids -v c:\Users\msnyder\Downloads\labelmerge_test_output:/output khanlab/labelmerge:latest /bids /output participant --base-desc 100Parcels7Networks --overlay_bids_dir tpl-MNI152NLin2009cAsym --overlay_desc tn --cores all
+    docker run -it --rm -v c:\Users\msnyder\Downloads\tpl-MNI152NLin2009cAsym:/bids -v c:\Users\msnyder\Downloads\labelmerge_test_output:/output khanlab/labelmerge:latest /bids /output participant --base-desc 100Parcels7Networks --overlay_bids_dir /bids --overlay_desc tn --cores all
 
 After this completes, you have a labelmerge_test_output directory with outputs for one subject. 
 
