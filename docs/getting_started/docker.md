@@ -46,7 +46,7 @@ docker run -it --rm khanlab_labelmerge_latest.sif --help-snakemake
 
 ## Running an example
 
-Download and extract a BIDS dataset for this test from [labelmerge_test.tar](https://www.dropbox.com/scl/fi/phmmofiy4q6o1k01rs6c4/ds003653.tar?rlkey=bpa8fxfl0lyrdc38fs6aowta7&st=zvhpqsga&dl=1"). Here we will also assume you chose to save and extract to the directory `c:\Users\msnyder\Downloads\`.
+Download and extract a BIDS dataset for this test from [labelmerge_test.tar]("https://www.dropbox.com/scl/fo/qzsym6f7k56yc8jcseawu/AOiV4AhmH6oiTO0Cr4GoaW8?rlkey=wftu1ph2cbdlysocqvbn1muka&st=xw5x84bp&dl=0"). Here we will also assume you chose to save and extract to the directory `c:\Users\msnyder\Downloads\`.
 
 This contains a `/labelmerge_test` directory with data from the **MNI152NLin2009cAsym_atlas**, containing cortical and subcortical volumes to merge.
 

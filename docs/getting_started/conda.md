@@ -46,7 +46,7 @@ You can try Labelmerge on a sample dataset to make sure everything works as expe
 First, download and extract a single-subject BIDS dataset for this test:
 
 ```bash
-wget "https://www.dropbox.com/scl/fi/phmmofiy4q6o1k01rs6c4/ds003653.tar?rlkey=bpa8fxfl0lyrdc38fs6aowta7&st=zvhpqsga&dl=1" -O labelmerge_test.tar
+wget "https://www.dropbox.com/scl/fo/qzsym6f7k56yc8jcseawu/AOiV4AhmH6oiTO0Cr4GoaW8?rlkey=wftu1ph2cbdlysocqvbn1muka&st=xw5x84bp&dl=0" -O labelmerge_test.tar
 tar -xvf labelmerge_test.tar
 ```
 
@@ -150,7 +150,7 @@ If you encounter issues while setting up labelmerge via Conda:
   ```
 - Double-check that your environment is activated (`mamba activate labelmerge-env` or `labelmerge-dev`)
 - Try creating a fresh environment if problems persist
-- Search for similar issues or open a new one in the [GitHub issues](https://github.com/afids/autoafids/issues) page
+- Search for similar issues or open a new one in the [GitHub issues](https://github.com/khanlab/labelmerge/issues) page
 
 ---
 
