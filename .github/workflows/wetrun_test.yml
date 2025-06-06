@@ -32,7 +32,7 @@ jobs:
           echo "LABELMERGE_CACHE_DIR=`pwd`/test_data/labelmerge_cache_dir" >> $GITHUB_ENV
       - name: Run wet-run test for cortical and subcortical files
         shell: bash -l {0}
-        run: |
+        run: |-
           conda activate snakebids-env
           ./labelmerge/run.py test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym test_out participant \
             --base-desc 100Parcels7Networks --overlay_bids_dir test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym/ \

@@ -1,7 +1,6 @@
+---
 name: labelmerge-dev
-channels:
-  - conda-forge
-  - defaults
+channels: [conda-forge, defaults]
 dependencies:
   - python=3.10
   - snakebids=0.14.0
