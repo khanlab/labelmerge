@@ -45,14 +45,31 @@ You can try Labelmerge on a sample dataset to make sure everything works as expe
 
 First, download and extract a single-subject BIDS dataset for this test:
 
-***need to add test data to dropbox***
+```bash
+wget "https://www.dropbox.com/scl/fi/phmmofiy4q6o1k01rs6c4/ds003653.tar?rlkey=bpa8fxfl0lyrdc38fs6aowta7&st=zvhpqsga&dl=1" -O labelmerge_test.tar
+tar -xvf labelmerge_test.tar
+```
+
+This cwill create a `/labelmerge_test` folder with data from the **MNI152NLin2009cAsym_atlas**, containing cortical and subcortical volumes to merge.
+
+```
+labelmerge-test
+    └── tpl-MNI152NLin2009cAsym
+        └── anat
+            ├── tpl-MNI152NLin2009cAsym_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.tsv
+            ├── tpl-MNI152NLin2009cAsym_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.tsv
+            ├── tpl-MNI152NLin2009cAsym_res-01_atlas-MIAL67ThalamicNuclei_desc-tn_dseg.nii.gz
+            └──  tpl-MNI152NLin2009cAsym_res-01_atlas-Schaefer2018_desc-100Parcels7Networks_dseg.nii.gz
+
+3 directories, 4 files
+```
 
 ### Run the full Labelmerge BIDS pipeline
 
 By default (Linux or Intel-based macOS), you can run:
 
 ```bash
-labelmerge bids_dir output_dir participant --base-desc base_desc --overlay_bids_dir overlay_bids_dir --overlay_desc overlay_desc --cores all
+labelmerge labelmerge_test output_dir participant --base-desc 100Parcels7Networks --overlay_bids_dir  labelmerge_test --overlay_desc tn --cores all
 ```
 
 This should run the full pipeline and place results in a new `output_dir/` folder.
@@ -60,7 +77,7 @@ This should run the full pipeline and place results in a new `output_dir/` folde
 If you’re on an M-chip mac, prefix with CONDA_SUBDIR=osx-64 to ensure compatibility:
 
 ```bash
-CONDA_SUBDIR=osx-64 labelmerge bids_dir output_dir participant --base-desc base_desc --overlay_bids_dir overlay_bids_dir --overlay_desc overlay_desc --cores all
+CONDA_SUBDIR=osx-64 labelmerge labelmerge_test output_dir participant --base-desc 100Parcels7Networks --overlay_bids_dir  labelmerge_test --overlay_desc tn --cores all
 ```
 
 ## Cache Directory
