@@ -9,7 +9,8 @@
 
 getting_started/installation
 getting_started/docker
-getting_started/singularity
+getting_started/apptainer
+getting_started/conda 
 ```
 
 ```{toctree}
@@ -19,6 +20,7 @@ getting_started/singularity
 :maxdepth: 2
 
 usage/cli
+usage/useful_options
 usage/faq
 ```
 
@@ -29,6 +31,15 @@ usage/faq
 :maxdepth: 2
 
 workflow/workflow
+```
+
+```{toctree}
+:caption: Outputs of Labelmerge
+:name: outputs
+:hidden:
+:maxdepth: 2
+
+Outputs/output_files
 ```
 
 ```{toctree}
