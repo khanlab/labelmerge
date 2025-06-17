@@ -70,11 +70,18 @@ parse_args:
     help: Directory containing labelmaps to be overlaid on the base input labelmaps.
     nargs: '?'
     type: Path
+  --overlay2_bids_dir:
+    help: Directory containing labelmaps to be overlaid on the combined labelmaps.
+    nargs: '?'
+    type: Path
   --base_desc:
     help: Description entity for base labelmaps
     nargs: '?'
   --overlay_desc:
     help: Description entity for overlay labelmaps
+    nargs: '?'
+  --overlay2_desc:
+    help: Description entity for second overlay labelmaps
     nargs: '?'
   --base_exceptions:
     help: Space separated integer labels from the base labelmap to keep over overlay labels at the same voxels.
@@ -82,11 +89,17 @@ parse_args:
   --overlay_exceptions:
     help: Space separated integer labels from the overlay image to be overwritten by base labels at the same voxels.
     nargs: '*'
+  --overlay2_exceptions:
+    help: Space separated integer labels from the overlay image 2 to be overwritten by the combined labels at the same voxels.
+    nargs: '*'
   --base_drops:
     help: Space separated integer labels from the base image to drop from the output.
     nargs: '*'
   --overlay_drops:
     help: Space separated integer labels from the overlay image to drop from the output.
+    nargs: '*'
+  --overlay2_drops:
+    help: Space separated integer labels from the second overlay image to drop from the output.
     nargs: '*'
 
 # Workflow specific config

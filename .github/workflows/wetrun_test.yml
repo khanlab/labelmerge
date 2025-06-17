@@ -37,3 +37,10 @@ jobs:
           ./labelmerge/run.py test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym test_out participant \
             --base-desc 100Parcels7Networks --overlay_bids_dir test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym \
             --overlay_desc tn --cores all --force-output --conda-frontend mamba | tee labelmerge_output.log
+      - name: Run wet-run test for merging 3 labels
+        shell: bash -l {0}
+        run: |
+          conda activate snakebids-env
+          ./labelmerge/run.py test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym test_out participant \
+            --base-desc 100Parcels7Networks --overlay_bids_dir test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym \
+            --overlay_desc tn --overlay2_bids_dir test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym/ --overlay2_desc carpet --cores all --force-output --conda-frontend mamba | tee labelmerge_output.log
