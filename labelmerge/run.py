@@ -30,6 +30,7 @@ conda_prefix = Path(utils.get_download_dir()) / "conda"
 if "SNAKEMAKE_CONDA_PREFIX" not in os.environ:
     os.environ["SNAKEMAKE_CONDA_PREFIX"] = str(conda_prefix)
 
+
 def get_parser():
     """Exposes parser for sphinx doc generation, cwd is the docs dir"""
     return app.build_parser().parser
