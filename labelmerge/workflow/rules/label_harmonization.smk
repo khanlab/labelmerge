@@ -63,6 +63,7 @@ def build_metadata_path(wildcards):
         )
     return out
 
+
 rule merge_labels:
     input:
         unpack(build_metadata_path),
@@ -105,12 +106,15 @@ rule merge_labels:
         "{params.base_exceptions} {params.overlay_exceptions} "
         "{params.base_drops} {params.overlay_drops}"
 
+
 rule merge_labels_again:
     input:
         unpack(build_metadata_path),
-        base2_metadata = rules.merge_labels.output.merged_metadata,
-        base_map = rules.merge_labels.output.merged_map,
-        overlay_map = overlay2_inputs["labelmap"].path if config.get("overlay2_bids_dir") else "",
+        base2_metadata=rules.merge_labels.output.merged_metadata,
+        base_map=rules.merge_labels.output.merged_map,
+        overlay_map=overlay2_inputs["labelmap"].path
+        if config.get("overlay2_bids_dir")
+        else "",
     output:
         merged_map=bids(
             root=str(Path(config["output_dir"]) / "combined2"),

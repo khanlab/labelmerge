@@ -48,13 +48,17 @@ overlay_inputs = generate_inputs(
     pybids_inputs=overlay_config,
     participant_label=config["participant_label"],
 )
-overlay2_inputs = generate_inputs(
-    bids_dir=config.get("overlay2_bids_dir", config["bids_dir"]),
-    pybids_config=["bids", "derivatives"],
-    derivatives=config["derivatives"],
-    pybids_inputs=overlay2_config,
-    participant_label=config["participant_label"],
-    ) if config.get("overlay2_bids_dir") else None
+overlay2_inputs = (
+    generate_inputs(
+        bids_dir=config.get("overlay2_bids_dir", config["bids_dir"]),
+        pybids_config=["bids", "derivatives"],
+        derivatives=config["derivatives"],
+        pybids_inputs=overlay2_config,
+        participant_label=config["participant_label"],
+    )
+    if config.get("overlay2_bids_dir")
+    else None
+)
 
 
 # this adds constraints to the bids naming
@@ -67,6 +71,7 @@ wildcard_constraints:
 
 # Rules
 include: "rules/label_harmonization.smk"
+
 
 all_targets = []
 
@@ -89,7 +94,8 @@ else:
         rules.merge_labels.output["merged_metadata"],
     )
 
+
 rule all:
     input:
-        all_targets
+        all_targets,
     default_target: True
