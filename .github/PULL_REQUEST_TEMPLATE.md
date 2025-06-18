@@ -17,9 +17,10 @@ Put an `x` in the boxes that apply. You can also fill these out after creating t
 
 - [ ] Changes have been tested to ensure that fix is effective or that a feature works.
 - [ ] Changes pass the unit tests
+- [ ] Changes pass the wet run tests
 - [ ] Code has been run through the `poe quality` task
 - [ ] I have included necessary documentation or comments (as necessary)
 - [ ] Any dependent changes have been merged and published
 
 ## Notes
-All PRs will undergo the unit testing before being reviewed. You may be requested to explain or make additional changes before the PR is accepted.
+All PRs will undergo unit and wet run testing before being reviewed. You may be requested to explain or make additional changes before the PR is accepted.
