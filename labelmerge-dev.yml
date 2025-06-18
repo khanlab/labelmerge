@@ -1,0 +1,14 @@
+---
+name: labelmerge-dev
+channels: [conda-forge, bioconda, defaults]
+dependencies:
+  - python=3.11
+  - snakebids=0.14.0
+  - pytest>=7.0.1,<8.0.0
+  - pytest-console-scripts>=1.2,<2.0
+  - poethepoet>=0.10.0,<0.11.0
+  - pre-commit>=2.17.0,<3.0.0
+  - snakefmt>=0.6.1,<0.7.0
+  - yamlfix>=1.1.0,<2.0.0
+  - mypy>=0.991,<1.0.0
+  - ruff>=0.1.14,<0.2.0

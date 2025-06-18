@@ -1,0 +1,8 @@
+---
+name: merge_labels
+channels: [conda-forge, defaults]
+dependencies:
+  - python=3.9
+  - numpy>=1.22.3,<2.0
+  - nibabel>=3.2.2,<4.0
+  - xarray>=2022.11.0,<2023.0.0

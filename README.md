@@ -1,7 +1,7 @@
 ## Labelmerge
 
 ![Version](https://img.shields.io/github/v/tag/khanlab/labelmerge?label=version)
-![Python3](https://img.shields.io/badge/python-3.8_|_3.9_|_3.10_|_3.11-blue.svg)
+![Python3](https://img.shields.io/badge/python-3.11-blue.svg)
 ![Docker Pulls](https://img.shields.io/docker/pulls/khanlab/labelmerge)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7636410.svg)](https://doi.org/10.5281/zenodo.7636410)
 

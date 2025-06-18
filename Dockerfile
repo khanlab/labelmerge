@@ -1,21 +1,43 @@
-# Stage: build
-FROM python:3.9-slim-bullseye AS build
-COPY . /opt/labelmerge/
-RUN cd /opt/labelmerge \
-    && pip install --prefer-binary --no-cache-dir poetry \  
-    && poetry build -f wheel
+# 1) Start from a minimal base that already includes mamba
+FROM condaforge/mambaforge:latest
 
-# Stage: runtime
-# NOTE: g++ required to install wheel (snakebids)
-FROM python:3.9-slim-bullseye AS runtime
-COPY --from=build /opt/labelmerge/dist/*.whl /opt/labelmerge/
-RUN apt-get update -qq \
-    && apt-get install -y -q --no-install-recommends \
-    g++=4:10.2.1-1 \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && WHEEL=`ls /opt/labelmerge | grep whl` \
-    && pip install /opt/labelmerge/$WHEEL \
-    && rm -r /opt/labelmerge \
-    && apt-get purge -y -q g++ \
-    && apt-get --purge -y -qq autoremove
-ENTRYPOINT ["labelmerge"]
+# 2) Set working directory
+WORKDIR /src/
+
+# 3) Copy your entire repository into /src/
+COPY . /src/
+
+# 4) Disable user‐site packages
+ENV PYTHONNOUSERSITE=1
+
+
+RUN mamba create -n snakebids-env \
+    -c conda-forge \
+    -c bioconda \
+    snakebids -y \
+    && mamba clean --all --yes
+
+RUN echo "source /opt/conda/etc/profile.d/conda.sh && conda activate snakebids-env" >> ~/.bashrc
+
+RUN bash -lc "\
+    source /opt/conda/etc/profile.d/conda.sh && \
+    conda activate snakebids-env && \
+    ./labelmerge/run.py \
+    test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym \
+    test_out participant \
+    --base-desc 100Parcels7Networks \
+    --overlay_bids_dir test_data/bids_wetrun_testing/tpl-MNI152NLin2009cAsym \
+    --overlay_desc tn \
+    --use-conda \
+    --conda-create-envs-only \
+    --cores all \
+    --conda-prefix /src/conda-envs \
+    && mamba clean --all --yes \
+    && rm -rf /opt/conda/pkgs /root/.cache \
+    "
+
+# 8) Point Snakemake to the correct profile
+ENV SNAKEMAKE_PROFILE=/src/labelmerge/workflow/profiles/docker-conda
+
+# 9) Default entrypoint
+ENTRYPOINT ["/src/entrypoint.sh"]

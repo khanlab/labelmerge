@@ -52,10 +52,16 @@ def build_metadata_path(wildcards):
         Path(expand(overlay_inputs["labelmap"].path, **wildcards)[0]),
         config["overlay_bids_dir"],
     )
-    return {
+    out = {
         "base_metadata": base_metadata,
         "overlay_metadata": overlay_metadata,
     }
+    if config.get("overlay2_bids_dir"):
+        out["overlay2_metadata"] = load_metadata(
+            Path(expand(overlay2_inputs["labelmap"].path, **wildcards)[0]),
+            config["overlay2_bids_dir"],
+        )
+    return out
 
 
 rule merge_labels:
@@ -91,9 +97,51 @@ rule merge_labels:
         else "",
     resources:
         script=str(Path(workflow.basedir) / "scripts" / "labelmerge.py"),
+    conda:
+        "../envs/merge_labels.yaml"
     shell:
         "python3 {resources.script} {input.base_map} {input.base_metadata} "
         "{input.overlay_map} {input.overlay_metadata} "
         "{output.merged_map} {output.merged_metadata} "
         "{params.base_exceptions} {params.overlay_exceptions} "
         "{params.base_drops} {params.overlay_drops}"
+
+
+rule merge_labels_again:
+    input:
+        unpack(build_metadata_path),
+        base2_metadata=rules.merge_labels.output.merged_metadata,
+        base_map=rules.merge_labels.output.merged_map,
+        overlay_map=overlay2_inputs["labelmap"].path
+        if config.get("overlay2_bids_dir")
+        else "",
+    output:
+        merged_map=bids(
+            root=str(Path(config["output_dir"]) / "combined2"),
+            suffix="dseg.nii.gz",
+            desc="combined2",
+            **base_inputs["labelmap"].wildcards,
+        ),
+        merged_metadata=bids(
+            root=str(Path(config["output_dir"]) / "combined2"),
+            suffix="dseg.tsv",
+            desc="combined2",
+            **base_inputs["labelmap"].wildcards,
+        ),
+    params:
+        overlay_exceptions=f"--overlay2_exceptions {' '.join(config['overlay2_exceptions'])}"
+        if config.get("overlay2_exceptions")
+        else "",
+        overlay_drops=f"--overlay2_drops {' '.join(config['overlay2_drops'])}"
+        if config.get("overlay2_drops")
+        else "",
+    resources:
+        script=str(Path(workflow.basedir) / "scripts" / "labelmerge.py"),
+    conda:
+        "../envs/merge_labels.yaml"
+    shell:
+        "python3 {resources.script} {input.base_map} {input.base2_metadata} "
+        "{input.overlay_map} {input.overlay2_metadata} "
+        "{output.merged_map} {output.merged_metadata} "
+        "{params.overlay_exceptions} "
+        "{params.overlay_drops}"

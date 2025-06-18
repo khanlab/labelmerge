@@ -1,0 +1,52 @@
+{% set name = "labelmerge" %}
+{% set version = "1.0.0" %}
+{% set ref = "4a02fc68840b3692e0cda6fe3c6a0021692528bf" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/khanlab/labelmerge/archive/{{ ref }}.tar.gz
+  sha256: 3c68c0871285c5ceecc60378cb593f7b69b8173edf21a6d4a73240a2af4dffd8
+
+build:
+  entry_points: 
+    - labelmerge = labelmerge.run:app.run
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+
+requirements:
+  host:
+    - python
+    - poetry-core
+    - pip
+  run:
+    - python >=3.9,<4.0
+    - snakebids >=0.14.0
+    - snakemake >=9.0.1
+    - appdirs >=1.4.4,<2.0.0
+    - pulp <2.8.0  # [py<311]
+
+test:
+  imports:
+    - labelmerge
+  commands:
+    - labelmerge --help
+
+
+about:
+  home: https://github.com/khanlab/labelmerge
+  summary: |
+    A BIDS app for merging multiple label maps and metadata into a single parcellation scheme.
+  description: |
+    A Brain Imaging Data Structure (BIDS) app that combines the parcellations of multiple 
+    atlases into a single parcellation scheme that can be applied towards downstream analysis.
+  license: MIT
+  license_file: LICENSE
+
+
+extra:
+  recipe-maintainers:
+    - Dhananjhay
