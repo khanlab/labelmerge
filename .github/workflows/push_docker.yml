@@ -10,7 +10,3 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  deploy-pypi:
-    uses: khanlab/actions/.github/workflows/workflow-release_task-deployPypi.yml@v0.3.4
-    secrets:
-      PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
