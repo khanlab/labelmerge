@@ -60,15 +60,19 @@ jobs:
           conda mambabuild . -c conda-forge -c bioconda
       - name: Upload package to Khanlab channel
         shell: bash -l {0}
+        env:
+          ANACONDA_HOSTNAME: "gha-${{ github.run_id }}"
         run: |-
           conda activate base
 
           # delete any leftover token or netrc entry
           rm -f ~/.anaconda/token ~/.netrc || true
-          
+
           anaconda login \
             --username ${{ secrets.ANACONDA_USERNAME }} \
-            --password ${{ secrets.ANACONDA_PASSWORD }}
+            --password ${{ secrets.ANACONDA_PASSWORD }} \
+            --hostname "$ANACONDA_HOSTNAME"
+            
           anaconda upload "$PACKAGE_PATH" \
             --label main \
             --force \
