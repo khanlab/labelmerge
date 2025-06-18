@@ -31,6 +31,8 @@ base_config = deepcopy(config["pybids_inputs"])
 base_config["labelmap"]["filters"]["desc"] = config["base_desc"]
 overlay_config = deepcopy(config["pybids_inputs"])
 overlay_config["labelmap"]["filters"]["desc"] = config["overlay_desc"]
+overlay2_config = deepcopy(config["pybids_inputs"])
+overlay2_config["labelmap"]["filters"]["desc"] = config["overlay2_desc"]
 
 base_inputs = generate_inputs(
     bids_dir=config["bids_dir"],
@@ -46,6 +48,17 @@ overlay_inputs = generate_inputs(
     pybids_inputs=overlay_config,
     participant_label=config["participant_label"],
 )
+overlay2_inputs = (
+    generate_inputs(
+        bids_dir=config.get("overlay2_bids_dir", config["bids_dir"]),
+        pybids_config=["bids", "derivatives"],
+        derivatives=config["derivatives"],
+        pybids_inputs=overlay2_config,
+        participant_label=config["participant_label"],
+    )
+    if config.get("overlay2_bids_dir")
+    else None
+)
 
 
 # this adds constraints to the bids naming
@@ -60,12 +73,29 @@ wildcard_constraints:
 include: "rules/label_harmonization.smk"
 
 
+all_targets = []
+
+if config.get("overlay2_bids_dir"):
+
+    # when overlay2 is present, the *only* final targets you care about
+    # are the merge_labels_again outputs
+    all_targets += overlay2_inputs["labelmap"].expand(
+        rules.merge_labels_again.output["merged_map"],
+    )
+    all_targets += overlay2_inputs["labelmap"].expand(
+        rules.merge_labels_again.output["merged_metadata"],
+    )
+else:
+    # when overlay2 is *not* present, your finals are the simple two-way merge
+    all_targets += base_inputs["labelmap"].expand(
+        rules.merge_labels.output["merged_map"],
+    )
+    all_targets += base_inputs["labelmap"].expand(
+        rules.merge_labels.output["merged_metadata"],
+    )
+
+
 rule all:
     input:
-        base_inputs["labelmap"].expand(
-            rules.merge_labels.output["merged_map"],
-        ),
-        base_inputs["labelmap"].expand(
-            rules.merge_labels.output["merged_metadata"],
-        ),
+        all_targets,
     default_target: True
