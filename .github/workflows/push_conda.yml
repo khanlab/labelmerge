@@ -62,6 +62,10 @@ jobs:
         shell: bash -l {0}
         run: |-
           conda activate base
+
+          # delete any leftover token or netrc entry
+          rm -f ~/.anaconda/token ~/.netrc || true
+          
           anaconda login \
             --username ${{ secrets.ANACONDA_USERNAME }} \
             --password ${{ secrets.ANACONDA_PASSWORD }}
